@@ -28,21 +28,21 @@ export function DonationBlock({ content }: DonationBlockProps) {
   };
 
   return (
-    <section className="py-16 sm:py-24 bg-netflix-carbon border-t border-netflix-border/50 text-white">
+    <section id="donation" className="scroll-mt-16 py-14 sm:py-24 bg-netflix-carbon border-t border-netflix-border/50 text-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12 sm:mb-16">
+        <div className="text-center mb-10 sm:mb-16">
           <div className="inline-flex items-center gap-2 bg-netflix-red/10 border border-netflix-red/30 px-3 py-1 rounded-full mb-3">
             <Gift className="w-3.5 h-3.5 text-netflix-red" />
             <span className="text-xs font-bold text-netflix-red uppercase tracking-widest">
               Digital Wedding Gift
             </span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white font-serif">
+          <h2 className="text-2xl sm:text-5xl font-black uppercase tracking-tight text-white font-serif">
             {content.heading || "BOX OFFICE CONTRIBUTION"}
           </h2>
           {content.subheading && (
-            <p className="text-sm sm:text-base text-gray-400 mt-2 max-w-xl mx-auto">
+            <p className="text-xs sm:text-base text-gray-400 mt-2 max-w-xl mx-auto">
               {content.subheading}
             </p>
           )}

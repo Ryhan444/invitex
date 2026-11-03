@@ -75,15 +75,15 @@ export default function CreateEventPage() {
       <div className="flex items-center gap-3">
         <Link
           href="/admin/dashboard"
-          className="p-2 rounded-lg bg-neutral-900 border border-neutral-800 text-gray-400 hover:text-white"
+          className="p-2 rounded-lg bg-neutral-900 border border-neutral-800 text-gray-400 hover:text-white flex-shrink-0"
         >
           <ArrowLeft className="w-4 h-4" />
         </Link>
-        <div>
-          <h1 className="text-2xl font-black uppercase tracking-tight text-white font-serif">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white font-serif truncate">
             BUAT UNDANGAN BARU (MANUAL CREATOR)
           </h1>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-400 truncate">
             Daftarkan judul acara baru ke database Inviteflix.
           </p>
         </div>
@@ -91,7 +91,7 @@ export default function CreateEventPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-netflix-dark/90 border border-netflix-border/80 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5"
+        className="bg-netflix-dark/90 border border-netflix-border/80 rounded-2xl p-4 sm:p-8 shadow-2xl space-y-5"
       >
         {errorMsg && (
           <div className="p-3 bg-red-950/80 border border-netflix-red text-red-200 text-xs rounded-lg">
@@ -109,7 +109,7 @@ export default function CreateEventPage() {
             value={title}
             onChange={(e) => handleSlugify(e.target.value)}
             placeholder="Contoh: Sarah & Michael Wedding Premiere"
-            className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+            className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
           />
         </div>
 
@@ -117,14 +117,14 @@ export default function CreateEventPage() {
           <label className="block text-xs font-semibold text-gray-300 mb-1.5">
             Slug URL Eksklusif *
           </label>
-          <div className="flex items-center bg-neutral-900 border border-netflix-border rounded-lg px-3">
+          <div className="flex items-center bg-neutral-900 border border-netflix-border rounded-xl px-3">
             <span className="text-xs text-gray-500 font-mono">inviteflix.com/</span>
             <input
               type="text"
               required
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
-              className="w-full bg-transparent py-2.5 text-sm text-white focus:outline-none font-mono"
+              className="w-full bg-transparent py-2.5 text-base sm:text-sm text-white focus:outline-none font-mono"
             />
           </div>
         </div>
@@ -137,7 +137,7 @@ export default function CreateEventPage() {
             <select
               value={eventType}
               onChange={(e) => setEventType(e.target.value)}
-              className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+              className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
             >
               <option value="wedding">Wedding (Pernikahan)</option>
               <option value="birthday">Birthday (Ulang Tahun)</option>
@@ -156,7 +156,7 @@ export default function CreateEventPage() {
               required
               value={eventDate}
               onChange={(e) => setEventDate(e.target.value)}
-              className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+              className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
             />
           </div>
         </div>
@@ -169,7 +169,7 @@ export default function CreateEventPage() {
             type="url"
             value={audioUrl}
             onChange={(e) => setAudioUrl(e.target.value)}
-            className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+            className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
           />
         </div>
 
@@ -181,7 +181,7 @@ export default function CreateEventPage() {
             type="text"
             value={audioTitle}
             onChange={(e) => setAudioTitle(e.target.value)}
-            className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+            className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
           />
         </div>
 

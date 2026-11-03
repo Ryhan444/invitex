@@ -132,30 +132,30 @@ export function GuestbookBlock({
   };
 
   return (
-    <section className="py-16 sm:py-24 bg-netflix-black border-t border-netflix-border/50 text-white">
+    <section id="guestbook" className="scroll-mt-16 py-14 sm:py-24 bg-netflix-black border-t border-netflix-border/50 text-white">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12 sm:mb-16">
+        <div className="text-center mb-10 sm:mb-16">
           <div className="inline-flex items-center gap-2 bg-netflix-red/10 border border-netflix-red/30 px-3 py-1 rounded-full mb-3">
             <MessageSquare className="w-3.5 h-3.5 text-netflix-red" />
             <span className="text-xs font-bold text-netflix-red uppercase tracking-widest">
               Live Realtime Guestbook
             </span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white font-serif">
+          <h2 className="text-2xl sm:text-5xl font-black uppercase tracking-tight text-white font-serif">
             {content.heading || "AUDIENCE REVIEWS & WISHES"}
           </h2>
           {content.subheading && (
-            <p className="text-sm sm:text-base text-gray-400 mt-2 max-w-xl mx-auto">
+            <p className="text-xs sm:text-base text-gray-400 mt-2 max-w-xl mx-auto">
               {content.subheading}
             </p>
           )}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* Submission Form (5 columns) */}
-          <div className="lg:col-span-5 bg-netflix-dark/80 border border-netflix-border/80 rounded-2xl p-6 shadow-2xl">
-            <h3 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
+          <div className="lg:col-span-5 bg-netflix-dark/80 border border-netflix-border/80 rounded-2xl p-4 sm:p-6 shadow-2xl">
+            <h3 className="text-base sm:text-lg font-bold text-white mb-1 flex items-center gap-2">
               <Heart className="w-4 h-4 text-netflix-red fill-current" />
               Kirim Ucapan & RSVP
             </h3>
@@ -174,7 +174,7 @@ export function GuestbookBlock({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Contoh: Budi Santoso & Partner"
-                  className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red transition-colors placeholder:text-neutral-500"
+                  className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red transition-colors placeholder:text-neutral-500"
                 />
               </div>
 
@@ -214,7 +214,7 @@ export function GuestbookBlock({
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Tuliskan pesan ulasan film cinta dan doa terbaik Anda di sini..."
-                  className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red transition-colors placeholder:text-neutral-500 resize-none"
+                  className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red transition-colors placeholder:text-neutral-500 resize-none"
                 />
               </div>
 

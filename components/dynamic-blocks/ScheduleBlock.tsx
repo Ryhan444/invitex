@@ -52,27 +52,27 @@ export function ScheduleBlock({ content, eventDate }: ScheduleBlockProps) {
   };
 
   return (
-    <section id="schedule" className="py-16 sm:py-24 bg-netflix-carbon border-t border-netflix-border/50 text-white">
+    <section id="schedule" className="scroll-mt-16 py-14 sm:py-24 bg-netflix-carbon border-t border-netflix-border/50 text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-16">
           <div className="inline-flex items-center gap-2 bg-netflix-red/10 border border-netflix-red/30 px-3 py-1 rounded-full mb-3">
             <Sparkles className="w-3.5 h-3.5 text-netflix-red" />
             <span className="text-xs font-bold text-netflix-red uppercase tracking-widest">
               Save The Date
             </span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white font-serif">
+          <h2 className="text-2xl sm:text-5xl font-black uppercase tracking-tight text-white font-serif">
             {content.heading || "PREMIERE SCHEDULE & VENUE"}
           </h2>
           {content.subheading && (
-            <p className="text-sm sm:text-base text-gray-400 mt-2">
+            <p className="text-xs sm:text-base text-gray-400 mt-2">
               {content.subheading}
             </p>
           )}
 
           {/* Countdown Timer Display (Netflix Digits) */}
-          <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-lg mx-auto mt-8">
+          <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-lg mx-auto mt-6 sm:mt-8">
             {[
               { label: "Hari", value: timeLeft.days },
               { label: "Jam", value: timeLeft.hours },
@@ -81,12 +81,12 @@ export function ScheduleBlock({ content, eventDate }: ScheduleBlockProps) {
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="bg-netflix-dark/80 border border-netflix-border/80 rounded-xl p-3 sm:p-4 text-center shadow-lg"
+                className="bg-netflix-dark/80 border border-netflix-border/80 rounded-xl p-2.5 sm:p-4 text-center shadow-lg"
               >
-                <div className="text-2xl sm:text-4xl font-black text-netflix-red font-mono">
+                <div className="text-xl sm:text-4xl font-black text-netflix-red font-mono">
                   {String(item.value).padStart(2, "0")}
                 </div>
-                <div className="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold mt-1">
+                <div className="text-[9px] sm:text-xs text-gray-400 uppercase tracking-wider font-semibold mt-0.5 sm:mt-1">
                   {item.label}
                 </div>
               </div>

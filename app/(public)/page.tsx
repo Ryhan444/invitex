@@ -199,7 +199,7 @@ export default async function LandingPage() {
           <div className="flex items-center space-x-6 text-gray-400">
             <Link href="/" className="hover:text-white">Home</Link>
             <Link href="/request" className="hover:text-white">Request Portal</Link>
-            <Link href="/admin/login" className="hover:text-white">Admin Dashboard</Link>
+            <Link href="/admin/login" className="hover:text-white">Admin Portal</Link>
           </div>
         </div>
       </footer>

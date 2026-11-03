@@ -52,7 +52,7 @@ export function AudioPlayer({
   if (!audioUrl) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex items-center gap-2">
       <audio ref={audioRef} src={audioUrl} loop preload="auto" />
 
       {/* Floating Pill Player */}

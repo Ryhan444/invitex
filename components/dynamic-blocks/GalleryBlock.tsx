@@ -30,21 +30,21 @@ export function GalleryBlock({ content }: GalleryBlockProps) {
   };
 
   return (
-    <section className="py-16 sm:py-24 bg-netflix-black border-t border-netflix-border/50 text-white">
+    <section id="gallery" className="scroll-mt-16 py-14 sm:py-24 bg-netflix-black border-t border-netflix-border/50 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-10 sm:mb-14">
+        <div className="mb-8 sm:mb-14">
           <div className="flex items-center gap-2 mb-2">
             <Camera className="w-4 h-4 text-netflix-red" />
             <span className="text-xs font-bold uppercase tracking-widest text-netflix-red">
               Visual Highlights
             </span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white font-serif">
+          <h2 className="text-2xl sm:text-5xl font-black uppercase tracking-tight text-white font-serif">
             {content.heading || "BEHIND THE SCENES & TRAILERS"}
           </h2>
           {content.subheading && (
-            <p className="text-sm sm:text-base text-gray-400 mt-2 max-w-2xl">
+            <p className="text-xs sm:text-base text-gray-400 mt-2 max-w-2xl leading-relaxed">
               {content.subheading}
             </p>
           )}

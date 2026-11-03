@@ -132,45 +132,45 @@ export default function RequestPortalPage() {
     <div className="min-h-screen bg-netflix-black text-white flex flex-col">
       <Navbar />
 
-      <div className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 w-full">
+      <div className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 sm:pb-24 w-full">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 bg-netflix-red/10 border border-netflix-red/30 px-3.5 py-1 rounded-full mb-3">
             <Film className="w-4 h-4 text-netflix-red" />
             <span className="text-xs font-bold text-netflix-red uppercase tracking-widest">
               Portal Pembuatan Undangan
             </span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white font-serif">
+          <h1 className="text-2xl sm:text-5xl font-black uppercase tracking-tight text-white font-serif">
             REQUEST YOUR CINEMATIC INVITATION
           </h1>
-          <p className="text-sm sm:text-base text-gray-400 mt-3 max-w-xl mx-auto">
+          <p className="text-xs sm:text-base text-gray-400 mt-2 sm:mt-3 max-w-xl mx-auto">
             Isi formulir di bawah ini. Tim kami akan menyiapkan storyboard dan merilis premiere undangan digital eksklusif Anda.
           </p>
         </div>
 
         {submittedSuccess ? (
-          <div className="bg-netflix-dark border border-netflix-border/80 rounded-2xl p-8 sm:p-12 text-center shadow-2xl max-w-xl mx-auto">
-            <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle2 className="w-9 h-9" />
+          <div className="bg-netflix-dark border border-netflix-border/80 rounded-2xl p-6 sm:p-12 text-center shadow-2xl max-w-xl mx-auto">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6">
+              <CheckCircle2 className="w-8 h-8 sm:w-9 sm:h-9" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white uppercase font-serif mb-3">
+            <h2 className="text-xl sm:text-3xl font-black text-white uppercase font-serif mb-3">
               PERMOHONAN BERHASIL DIKIRIM!
             </h2>
-            <p className="text-sm text-gray-300 mb-8 leading-relaxed">
+            <p className="text-xs sm:text-sm text-gray-300 mb-6 sm:mb-8 leading-relaxed">
               Terima kasih, <strong className="text-white">{clientName}</strong>. Pengajuan undangan dengan judul &ldquo;<strong className="text-white">{eventTitle || "Acara Anda"}</strong>&rdquo; telah kami terima dengan status <span className="bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-mono font-bold">PENDING</span>.
               Tim admin Inviteflix akan segera menghubungi via WhatsApp di <strong className="text-white">{clientPhone}</strong>.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/reza-amanda-wedding"
-                className="bg-netflix-red hover:bg-netflix-redHover text-white px-6 py-3 rounded-xl font-bold text-sm"
+                className="bg-netflix-red hover:bg-netflix-redHover text-white px-6 py-3 rounded-xl font-bold text-sm text-center"
               >
                 Lihat Contoh Undangan
               </Link>
               <Link
                 href="/"
-                className="bg-neutral-800 hover:bg-neutral-700 text-gray-300 px-6 py-3 rounded-xl font-medium text-sm border border-neutral-700"
+                className="bg-neutral-800 hover:bg-neutral-700 text-gray-300 px-6 py-3 rounded-xl font-medium text-sm border border-neutral-700 text-center"
               >
                 Kembali ke Beranda
               </Link>
@@ -179,10 +179,10 @@ export default function RequestPortalPage() {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="bg-netflix-dark/80 border border-netflix-border/80 rounded-2xl p-6 sm:p-10 shadow-2xl space-y-8"
+            className="bg-netflix-dark/80 border border-netflix-border/80 rounded-2xl p-4 sm:p-10 shadow-2xl space-y-6 sm:space-y-8"
           >
             {errorMsg && (
-              <div className="p-4 bg-red-950/80 border border-netflix-red text-red-200 text-sm rounded-xl">
+              <div className="p-3.5 sm:p-4 bg-red-950/80 border border-netflix-red text-red-200 text-xs sm:text-sm rounded-xl">
                 {errorMsg}
               </div>
             )}
@@ -206,7 +206,7 @@ export default function RequestPortalPage() {
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
                     placeholder="Contoh: Reza Rahardian"
-                    className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+                    className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   />
                 </div>
                 <div>
@@ -219,7 +219,7 @@ export default function RequestPortalPage() {
                     value={clientEmail}
                     onChange={(e) => setClientEmail(e.target.value)}
                     placeholder="nama@email.com"
-                    className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+                    className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   />
                 </div>
                 <div className="sm:col-span-2">
@@ -232,7 +232,7 @@ export default function RequestPortalPage() {
                     value={clientPhone}
                     onChange={(e) => setClientPhone(e.target.value)}
                     placeholder="081234567890"
-                    className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+                    className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   />
                 </div>
               </div>
@@ -254,7 +254,7 @@ export default function RequestPortalPage() {
                   <select
                     value={eventType}
                     onChange={(e) => setEventType(e.target.value)}
-                    className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+                    className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   >
                     <option value="wedding">Pernikahan (Wedding Premiere)</option>
                     <option value="birthday">Ulang Tahun (Birthday Bash)</option>
@@ -273,7 +273,7 @@ export default function RequestPortalPage() {
                     required
                     value={targetDate}
                     onChange={(e) => setTargetDate(e.target.value)}
-                    className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+                    className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   />
                 </div>
                 <div className="sm:col-span-2">
@@ -286,21 +286,21 @@ export default function RequestPortalPage() {
                     value={eventTitle}
                     onChange={(e) => setEventTitle(e.target.value)}
                     placeholder="Contoh: Reza & Amanda: The Beginning of Forever"
-                    className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+                    className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-300 mb-1.5">
                     Request URL Slug Khusus (Opsional)
                   </label>
-                  <div className="flex items-center bg-neutral-900 border border-netflix-border rounded-lg px-3">
+                  <div className="flex items-center bg-neutral-900 border border-netflix-border rounded-xl px-3">
                     <span className="text-xs text-gray-500 font-mono">inviteflix.com/</span>
                     <input
                       type="text"
                       value={preferredSlug}
                       onChange={(e) => setPreferredSlug(e.target.value)}
                       placeholder="reza-amanda"
-                      className="w-full bg-transparent py-2.5 text-sm text-white focus:outline-none font-mono"
+                      className="w-full bg-transparent py-2.5 text-base sm:text-sm text-white focus:outline-none font-mono"
                     />
                   </div>
                 </div>
@@ -313,7 +313,7 @@ export default function RequestPortalPage() {
                     value={backdropUrl}
                     onChange={(e) => setBackdropUrl(e.target.value)}
                     placeholder="https://images.unsplash.com/photo-..."
-                    className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red"
+                    className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   />
                 </div>
               </div>

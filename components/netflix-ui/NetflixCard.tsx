@@ -29,7 +29,7 @@ export function NetflixCard({ event, featured = false }: NetflixCardProps) {
   const seasonBadge = event.theme_config?.season_badge || "Special Edition";
 
   return (
-    <div className="group relative flex-none w-[260px] sm:w-[300px] transition-all duration-300 hover:z-30">
+    <div className="group relative flex-none w-[230px] xs:w-[260px] sm:w-[300px] transition-all duration-300 hover:z-30">
       <Link href={`/${event.slug}`} className="block">
         {/* Card Poster Container */}
         <div className="relative aspect-[16/9] w-full rounded-md overflow-hidden bg-netflix-dark border border-netflix-border/50 group-hover:scale-105 group-hover:shadow-2xl group-hover:border-netflix-red/60 transition-all duration-300">

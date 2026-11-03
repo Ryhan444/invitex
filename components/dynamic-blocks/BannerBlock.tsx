@@ -75,20 +75,20 @@ export function BannerBlock({
         </div>
 
         {/* Movie Title */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-white font-serif leading-none drop-shadow-2xl mb-4">
+        <h1 className="text-3xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-white font-serif leading-[1.05] drop-shadow-2xl mb-3 sm:mb-4 break-words">
           {content.title}
         </h1>
 
         {/* Subtitle / Tagline */}
         {content.subtitle && (
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-2xl font-light mb-5 leading-relaxed drop-shadow">
+          <p className="text-sm sm:text-lg md:text-xl text-gray-300 max-w-2xl font-light mb-5 leading-relaxed drop-shadow">
             &ldquo;{content.subtitle}&rdquo;
           </p>
         )}
 
         {/* Couple / Host Spotlight details (if wedding) */}
         {(content.groom_name || content.bride_name) && (
-          <div className="bg-black/50 backdrop-blur-md border border-netflix-border/80 rounded-xl p-4 sm:p-5 max-w-xl mb-6 shadow-2xl">
+          <div className="bg-black/60 backdrop-blur-md border border-netflix-border/80 rounded-xl p-4 sm:p-5 max-w-xl mb-6 shadow-2xl">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
               {content.groom_name && (
                 <div className="flex-1">
@@ -120,7 +120,7 @@ export function BannerBlock({
         )}
 
         {/* Netflix Metadata Badges */}
-        <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm font-semibold text-gray-300 mb-7">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm font-semibold text-gray-300 mb-6 sm:mb-7">
           <span className="text-emerald-400 font-bold flex items-center gap-1">
             <Sparkles className="w-3.5 h-3.5" />
             {content.rating || "99% Match"}
@@ -128,31 +128,31 @@ export function BannerBlock({
           <span>•</span>
           <span>{content.year || "2026"}</span>
           <span>•</span>
-          <span className="border border-gray-500 px-1.5 py-0.5 rounded text-[11px] font-bold text-gray-300">
+          <span className="border border-gray-500 px-1.5 py-0.5 rounded text-[10px] sm:text-[11px] font-bold text-gray-300">
             {content.season || "Season 1"}
           </span>
           <span>•</span>
-          <span className="bg-neutral-800 text-gray-300 px-2 py-0.5 rounded text-[11px] font-bold">
+          <span className="bg-neutral-800 text-gray-300 px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-bold">
             Ultra HD 4K
           </span>
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
           <button
             onClick={triggerOpen}
-            className="flex items-center gap-2.5 bg-netflix-red hover:bg-netflix-redHover text-white px-7 py-3.5 rounded font-black text-sm sm:text-base tracking-wide shadow-2xl hover:shadow-red-600/50 hover:scale-105 active:scale-95 transition-all duration-200"
+            className="flex items-center justify-center gap-2.5 bg-netflix-red hover:bg-netflix-redHover text-white px-7 py-3.5 rounded-xl sm:rounded font-black text-sm sm:text-base tracking-wide shadow-2xl hover:shadow-red-600/50 active:scale-98 transition-all duration-200"
           >
             <Play className="w-5 h-5 fill-current" />
-            {content.cta_text || "Buka Undangan (Play)"}
+            <span>{content.cta_text || "Buka Undangan (Play)"}</span>
           </button>
 
           <a
             href="#schedule"
-            className="flex items-center gap-2 bg-neutral-800/80 hover:bg-neutral-700 text-white px-6 py-3.5 rounded font-semibold text-sm sm:text-base backdrop-blur-md border border-neutral-700 hover:border-neutral-500 transition-all duration-200"
+            className="flex items-center justify-center gap-2 bg-neutral-800/80 hover:bg-neutral-700 text-white px-6 py-3.5 rounded-xl sm:rounded font-semibold text-sm sm:text-base backdrop-blur-md border border-neutral-700 hover:border-neutral-500 transition-all duration-200"
           >
             <Calendar className="w-4 h-4 text-netflix-red" />
-            Jadwal Acara
+            <span>Jadwal Acara</span>
           </a>
         </div>
       </div>

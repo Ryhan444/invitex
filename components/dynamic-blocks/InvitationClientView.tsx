@@ -46,9 +46,9 @@ export function InvitationClientView({
 
       {/* Guest Personalized VIP Notice if 'to' param is present */}
       {guestName && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40 bg-netflix-dark/95 border border-netflix-red/60 text-white px-4 py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2 text-xs sm:text-sm animate-pulse-slow">
-          <UserCheck className="w-4 h-4 text-netflix-red" />
-          <span>
+        <div className="fixed top-16 sm:top-20 left-1/2 -translate-x-1/2 z-40 max-w-[92vw] sm:max-w-md bg-netflix-dark/95 border border-netflix-red/60 text-white px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2 text-xs sm:text-sm animate-pulse-slow">
+          <UserCheck className="w-4 h-4 text-netflix-red flex-shrink-0" />
+          <span className="truncate">
             Kepada Yth. Tamu VIP: <strong className="text-white">{guestName}</strong>
           </span>
         </div>
@@ -73,16 +73,16 @@ export function InvitationClientView({
       />
 
       {/* Bottom Floating Quick Actions Bar */}
-      <div className="fixed bottom-6 left-6 z-40 flex items-center gap-2">
+      <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 flex items-center gap-2">
         <button
           onClick={handleShareLink}
-          className="bg-netflix-dark/90 hover:bg-neutral-800 border border-netflix-border/80 px-3.5 py-2 rounded-full shadow-2xl text-xs font-semibold text-gray-200 flex items-center gap-2 backdrop-blur-md transition-all"
+          className="bg-netflix-dark/95 hover:bg-neutral-800 border border-netflix-border px-3 sm:px-3.5 py-2 rounded-full shadow-2xl text-xs font-semibold text-gray-200 flex items-center gap-2 backdrop-blur-md transition-all active:scale-95"
           title="Salin Tautan Undangan"
         >
           {copiedLink ? (
             <>
               <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400">Tautan Tersalin!</span>
+              <span className="text-emerald-400">Tersalin!</span>
             </>
           ) : (
             <>

@@ -5,11 +5,9 @@ import Link from "next/link";
 import {
   Inbox,
   CheckCircle2,
-  XCircle,
   ExternalLink,
   MessageCircle,
   Clock,
-  Sparkles,
   Phone,
   Mail,
   Calendar,
@@ -67,7 +65,7 @@ export default function AdminRequestsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Page Title */}
+      {/* Page Title & Responsive Filters */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white font-serif">
@@ -78,13 +76,13 @@ export default function AdminRequestsPage() {
           </p>
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex items-center gap-2 bg-neutral-900 p-1 rounded-xl border border-netflix-border">
+        {/* Filter Pills with touch-friendly horizontal scroll on mobile */}
+        <div className="flex items-center gap-1.5 bg-neutral-900 p-1.5 rounded-xl border border-netflix-border overflow-x-auto max-w-full">
           {["all", "pending", "approved", "rejected"].map((st) => (
             <button
               key={st}
               onClick={() => setFilter(st)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase whitespace-nowrap transition-all flex-shrink-0 ${
                 filter === st
                   ? "bg-netflix-red text-white shadow"
                   : "text-gray-400 hover:text-white"
@@ -98,13 +96,17 @@ export default function AdminRequestsPage() {
 
       {/* Requests List */}
       {isLoading ? (
-        <div className="text-center py-16 text-gray-500">Memuat daftar permohonan...</div>
+        <div className="text-center py-16 text-gray-500">
+          <div className="w-8 h-8 border-2 border-netflix-red border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          Memuat daftar permohonan...
+        </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-netflix-dark/60 border border-netflix-border rounded-2xl p-12 text-center text-gray-400">
+        <div className="bg-netflix-dark/60 border border-netflix-border rounded-2xl p-10 sm:p-12 text-center text-gray-400">
+          <Inbox className="w-10 h-10 text-gray-600 mx-auto mb-3" />
           Tidak ada permohonan dengan status &ldquo;{filter}&rdquo;.
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-5">
+        <div className="grid grid-cols-1 gap-4 sm:gap-5">
           {filtered.map((req) => {
             const payload = req.payload_data || {};
             const isPending = req.status === "pending";
@@ -116,7 +118,7 @@ export default function AdminRequestsPage() {
             return (
               <div
                 key={req.id}
-                className="bg-netflix-dark/90 border border-netflix-border/80 rounded-2xl p-6 shadow-xl hover:border-neutral-600 transition-colors"
+                className="bg-netflix-dark/90 border border-netflix-border/80 rounded-2xl p-4 sm:p-6 shadow-xl hover:border-neutral-600 transition-colors"
               >
                 <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-5">
                   {/* Left Column: Client & Event Info */}
@@ -138,17 +140,17 @@ export default function AdminRequestsPage() {
                       </span>
                       <span className="text-xs text-gray-500">•</span>
                       <span className="text-xs text-gray-400 flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
+                        <Clock className="w-3 h-3 text-gray-500" />
                         {new Date(req.created_at).toLocaleDateString("id-ID")}
                       </span>
                     </div>
 
-                    <h3 className="text-xl font-bold text-white">
+                    <h3 className="text-lg sm:text-xl font-bold text-white">
                       {payload.event_title || `${req.client_name}'s Event`}
                     </h3>
 
                     {/* Client contacts */}
-                    <div className="flex flex-wrap items-center gap-4 text-xs text-gray-300">
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs text-gray-300">
                       <span className="font-semibold text-white">
                         Pemesan: {req.client_name}
                       </span>
@@ -157,7 +159,7 @@ export default function AdminRequestsPage() {
                         className="flex items-center gap-1 text-gray-400 hover:text-white"
                       >
                         <Mail className="w-3.5 h-3.5 text-netflix-red" />
-                        {req.client_email}
+                        <span className="truncate max-w-[200px]">{req.client_email}</span>
                       </a>
                       <a
                         href={`https://wa.me/${req.client_phone.replace(/[^0-9]/g, "")}`}
@@ -166,7 +168,7 @@ export default function AdminRequestsPage() {
                         className="flex items-center gap-1 text-emerald-400 hover:underline"
                       >
                         <Phone className="w-3.5 h-3.5" />
-                        {req.client_phone} (WhatsApp)
+                        <span>{req.client_phone} (WhatsApp)</span>
                       </a>
                     </div>
 
@@ -201,16 +203,16 @@ export default function AdminRequestsPage() {
                   </div>
 
                   {/* Right Column: Actions */}
-                  <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 flex-shrink-0 lg:w-48">
+                  <div className="flex flex-col sm:flex-row lg:flex-col gap-2 flex-shrink-0 lg:w-48 pt-2 sm:pt-0 border-t sm:border-t-0 border-netflix-border/50">
                     {isPending && (
                       <>
                         <button
                           onClick={() => handleUpdateStatus(req.id, "approved")}
                           disabled={actionLoadingId === req.id}
-                          className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-lg"
+                          className="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-lg"
                         >
                           <CheckCircle2 className="w-4 h-4" />
-                          Setujui & Generate
+                          <span>Setujui & Generate</span>
                         </button>
                         <button
                           onClick={() => handleUpdateStatus(req.id, "rejected")}
@@ -223,14 +225,14 @@ export default function AdminRequestsPage() {
                     )}
 
                     {isApproved && (
-                      <div className="space-y-2">
+                      <div className="space-y-1.5">
                         <Link
                           href={`/${generatedSlug}`}
                           target="_blank"
                           className="w-full bg-netflix-red hover:bg-netflix-redHover text-white font-bold py-2 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow"
                         >
                           <ExternalLink className="w-4 h-4" />
-                          Lihat Undangan Live
+                          <span>Lihat Undangan Live</span>
                         </Link>
                         <span className="text-[10px] text-emerald-400 block text-center font-medium">
                           ✓ Berhasil di-generate & tayang
@@ -245,7 +247,7 @@ export default function AdminRequestsPage() {
                       className="w-full bg-neutral-900 hover:bg-neutral-800 text-gray-300 font-semibold py-2 px-3 rounded-xl text-xs border border-neutral-800 flex items-center justify-center gap-1.5 transition-colors"
                     >
                       <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-                      Chat WhatsApp
+                      <span>Chat WhatsApp</span>
                     </a>
                   </div>
                 </div>
@@ -257,4 +259,3 @@ export default function AdminRequestsPage() {
     </div>
   );
 }
-

@@ -29,19 +29,27 @@ export function BlockRenderer({
     .filter((sec) => sec.is_visible !== false)
     .sort((a, b) => a.order_index - b.order_index);
 
+  const bannerSection = visibleSections.find((s) => s.type === "banner");
+  const contentSections = visibleSections.filter((s) => s.type !== "banner");
+
   return (
     <div className="w-full">
-      {visibleSections.map((section, index) => {
+      {/* 1. Hero Banner */}
+      {bannerSection && (
+        <BannerBlock
+          key={bannerSection.id || "banner"}
+          content={bannerSection.content}
+          onOpenInvitation={onOpenInvitation}
+          targetDate={eventDate}
+        />
+      )}
+
+      {/* Target anchor for 'Buka Undangan (Play)' smooth scroll */}
+      <div id="invitation-content" className="scroll-mt-14" />
+
+      {/* 2. Content Sections */}
+      {contentSections.map((section, index) => {
         switch (section.type) {
-          case "banner":
-            return (
-              <BannerBlock
-                key={section.id || index}
-                content={section.content}
-                onOpenInvitation={onOpenInvitation}
-                targetDate={eventDate}
-              />
-            );
           case "story":
             return <StoryBlock key={section.id || index} content={section.content} />;
           case "schedule":
@@ -72,4 +80,3 @@ export function BlockRenderer({
     </div>
   );
 }
-

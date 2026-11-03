@@ -78,7 +78,7 @@ export default async function LandingPage() {
           </div>
 
           {/* Metadata Highlights */}
-          <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-gray-400 mt-8">
+          {/* <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-gray-400 mt-8">
             <span className="text-emerald-400 font-bold flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5" />
               99% Match for Special Celebrations
@@ -93,7 +93,7 @@ export default async function LandingPage() {
             <span className="border border-gray-600 px-1.5 py-0.5 rounded text-gray-300">
               BLOCK-BASED ENGINE
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
 

@@ -44,7 +44,7 @@ export function BlockRenderer({
         />
       )}
 
-      {/* Target anchor for 'Buka Undangan (Play)' smooth scroll */}
+      {/* Target anchor for 'Open Invitation (Play)' smooth scroll */}
       <div id="invitation-content" className="scroll-mt-14" />
 
       {/* 2. Content Sections */}

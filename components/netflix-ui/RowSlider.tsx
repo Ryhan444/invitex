@@ -38,11 +38,8 @@ export function RowSlider({ title, subtitle, badge, events }: RowSliderProps) {
               {badge}
             </span>
           )}
-          <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight hover:text-netflix-red transition-colors cursor-pointer flex items-center gap-2">
+          <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight flex items-center gap-2">
             {title}
-            <span className="text-xs text-netflix-red font-semibold opacity-0 group-hover/slider:opacity-100 transition-opacity">
-              Explore All &rsaquo;
-            </span>
           </h3>
         </div>
         {subtitle && (

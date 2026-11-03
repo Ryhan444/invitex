@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Calendar, Clock, MapPin, ExternalLink, CalendarPlus, Sparkles } from "lucide-react";
-import { ScheduleContent } from "@/types";
+import { ScheduleContent, ScheduleEvent } from "@/types";
 
 interface ScheduleBlockProps {
   content: ScheduleContent;
@@ -43,7 +43,7 @@ export function ScheduleBlock({ content, eventDate }: ScheduleBlockProps) {
     return () => clearInterval(interval);
   }, [eventDate]);
 
-  const addToCalendar = (eventItem: any) => {
+  const addToCalendar = (eventItem: ScheduleEvent) => {
     const title = encodeURIComponent(eventItem.title);
     const location = encodeURIComponent(eventItem.address || eventItem.location_name);
     const details = encodeURIComponent(eventItem.notes || "Inviteflix Digital Invitation");
@@ -74,10 +74,10 @@ export function ScheduleBlock({ content, eventDate }: ScheduleBlockProps) {
           {/* Countdown Timer Display (Netflix Digits) */}
           <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-lg mx-auto mt-6 sm:mt-8">
             {[
-              { label: "Hari", value: timeLeft.days },
-              { label: "Jam", value: timeLeft.hours },
-              { label: "Menit", value: timeLeft.minutes },
-              { label: "Detik", value: timeLeft.seconds },
+              { label: "Days", value: timeLeft.days },
+              { label: "Hours", value: timeLeft.hours },
+              { label: "Minutes", value: timeLeft.minutes },
+              { label: "Seconds", value: timeLeft.seconds },
             ].map((item, idx) => (
               <div
                 key={idx}
@@ -99,7 +99,7 @@ export function ScheduleBlock({ content, eventDate }: ScheduleBlockProps) {
           {events.map((ev, idx) => (
             <div
               key={idx}
-              className="bg-netflix-dark/90 border border-netflix-border/80 rounded-2xl p-6 sm:p-8 hover:border-netflix-red/50 transition-all duration-300 shadow-xl flex flex-col justify-between"
+              className="bg-netflix-dark/90 border border-netflix-border/80 rounded-xl p-6 sm:p-8 hover:border-netflix-red/50 transition-all duration-300 shadow-xl flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -108,7 +108,7 @@ export function ScheduleBlock({ content, eventDate }: ScheduleBlockProps) {
                   </span>
                   <button
                     onClick={() => addToCalendar(ev)}
-                    className="text-xs text-gray-300 hover:text-white flex items-center gap-1.5 bg-neutral-800 hover:bg-neutral-700 px-3 py-1.5 rounded border border-neutral-700 transition-colors"
+                    className="text-xs text-gray-300 hover:text-white flex items-center gap-1.5 bg-neutral-800 hover:bg-neutral-700 px-3 py-1.5 rounded-lg border border-neutral-700 transition-colors"
                   >
                     <CalendarPlus className="w-3.5 h-3.5 text-netflix-red" />
                     + Google Calendar
@@ -149,7 +149,7 @@ export function ScheduleBlock({ content, eventDate }: ScheduleBlockProps) {
 
         {/* Embedded Map Section */}
         {content.maps_embed_url && (
-          <div className="rounded-2xl overflow-hidden border border-netflix-border/80 shadow-2xl bg-neutral-900">
+          <div className="rounded-xl overflow-hidden border border-netflix-border/80 shadow-2xl bg-neutral-900">
             <div className="p-4 bg-netflix-dark flex flex-wrap items-center justify-between gap-3 border-b border-netflix-border/60">
               <div className="flex items-center gap-2 text-sm font-semibold text-white">
                 <MapPin className="w-4 h-4 text-netflix-red" />
@@ -162,7 +162,7 @@ export function ScheduleBlock({ content, eventDate }: ScheduleBlockProps) {
                   rel="noopener noreferrer"
                   className="text-xs text-netflix-red hover:underline flex items-center gap-1 font-semibold"
                 >
-                  Buka di Aplikasi Google Maps
+                  Open in Google Maps
                   <ExternalLink className="w-3 h-3" />
                 </a>
               )}

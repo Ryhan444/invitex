@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Inviteflix - Cinematic Digital Invitation Platform",
+  title: {
+    default: "Inviteflix | Cinematic Digital Invitations",
+    template: "%s | Inviteflix",
+  },
   description:
-    "Platform undangan digital multi-acara dengan estetika visual ala Netflix. Modern dark mode, cinematic hero banner, live interactive guestbook, dan box office gift.",
+    "Netflix-style digital invitations for weddings, birthdays and special events, with a cinematic hero banner, live guestbook, RSVP and digital gifts.",
   icons: {
     icon: "/favicon.ico",
   },
@@ -16,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className="dark scroll-smooth">
+    <html lang="en" className="dark scroll-smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

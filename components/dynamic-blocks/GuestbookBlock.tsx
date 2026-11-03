@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { MessageSquare, Send, CheckCircle2, User, Clock, Heart, Users } from "lucide-react";
+import { MessageSquare, Send, CheckCircle2, AlertCircle, Clock, Heart, Users } from "lucide-react";
 import { GuestWish, GuestbookContent, AttendanceStatus } from "@/types";
 import { createSupabaseBrowserClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
@@ -22,6 +22,7 @@ export function GuestbookBlock({
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successNotice, setSuccessNotice] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Sync with initialWishes when provided
   useEffect(() => {
@@ -64,11 +65,20 @@ export function GuestbookBlock({
     }
   }, [eventId]);
 
+  // Undo the optimistic update and restore the guest's input so nothing is lost
+  const rollbackWish = (wish: GuestWish) => {
+    setWishes((prev) => prev.filter((w) => w.id !== wish.id));
+    setSuccessNotice(false);
+    setName(wish.name);
+    setMessage(wish.message);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !message.trim()) return;
 
     setIsSubmitting(true);
+    setErrorMessage(null);
 
     const tempWish: GuestWish = {
       id: `w-${Date.now()}`,
@@ -99,10 +109,16 @@ export function GuestbookBlock({
       });
 
       if (!res.ok) {
-        console.warn("Failed to persist wish to API, kept locally in UI");
+        const data = await res.json().catch(() => ({}));
+        rollbackWish(tempWish);
+        setErrorMessage(
+          data?.error || "We couldn't post your message. Please try again."
+        );
       }
     } catch (err) {
       console.error("Error submitting wish:", err);
+      rollbackWish(tempWish);
+      setErrorMessage("We couldn't post your message. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -113,19 +129,19 @@ export function GuestbookBlock({
       case "attending":
         return (
           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-            ✓ Hadir
+            ✓ Attending
           </span>
         );
       case "not_attending":
         return (
           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
-            ✕ Berhalangan
+            ✕ Can&apos;t Attend
           </span>
         );
       case "tentative":
         return (
           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
-            ? Ragu-ragu
+            ? Maybe
           </span>
         );
     }
@@ -154,39 +170,40 @@ export function GuestbookBlock({
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* Submission Form (5 columns) */}
-          <div className="lg:col-span-5 bg-netflix-dark/80 border border-netflix-border/80 rounded-2xl p-4 sm:p-6 shadow-2xl">
+          <div className="lg:col-span-5 bg-netflix-dark/80 border border-netflix-border/80 rounded-xl p-4 sm:p-6 shadow-2xl">
             <h3 className="text-base sm:text-lg font-bold text-white mb-1 flex items-center gap-2">
               <Heart className="w-4 h-4 text-netflix-red fill-current" />
-              Kirim Ucapan & RSVP
+              Send Your Wishes & RSVP
             </h3>
             <p className="text-xs text-gray-400 mb-5">
-              Ulasan Anda akan langsung tampil secara realtime tanpa reload halaman.
+              Your message will appear instantly, no page refresh needed.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                  Nama Anda *
+                  Your Name *
                 </label>
                 <input
                   type="text"
                   required
+                  maxLength={80}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Contoh: Budi Santoso & Partner"
+                  placeholder="e.g. Budi Santoso & Partner"
                   className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red transition-colors placeholder:text-neutral-500"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                  Konfirmasi Kehadiran
+                  Will You Attend?
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {[
-                    { id: "attending", label: "Hadir" },
-                    { id: "tentative", label: "Ragu" },
-                    { id: "not_attending", label: "Tidak" },
+                    { id: "attending", label: "Yes" },
+                    { id: "tentative", label: "Maybe" },
+                    { id: "not_attending", label: "No" },
                   ].map((opt) => (
                     <button
                       key={opt.id}
@@ -206,14 +223,15 @@ export function GuestbookBlock({
 
               <div>
                 <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                  Pesan & Doa Restu *
+                  Message & Blessings *
                 </label>
                 <textarea
                   required
                   rows={4}
+                  maxLength={500}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Tuliskan pesan ulasan film cinta dan doa terbaik Anda di sini..."
+                  placeholder="Write your review of this love story and your best wishes here..."
                   className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red transition-colors placeholder:text-neutral-500 resize-none"
                 />
               </div>
@@ -224,13 +242,20 @@ export function GuestbookBlock({
                 className="w-full bg-netflix-red hover:bg-netflix-redHover text-white font-bold py-3 rounded-lg text-sm tracking-wide shadow-lg shadow-red-900/30 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 <Send className="w-4 h-4" />
-                {isSubmitting ? "Mengirim Ucapan..." : "Kirim Ulasan & RSVP"}
+                {isSubmitting ? "Sending..." : "Send Wishes & RSVP"}
               </button>
 
               {successNotice && (
                 <div className="p-3 bg-emerald-950/80 border border-emerald-600 text-emerald-200 text-xs rounded-lg flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                  <span>Terima kasih! Ucapan Anda telah ditayangkan secara live.</span>
+                  <span>Thank you! Your wishes are now live.</span>
+                </div>
+              )}
+
+              {errorMessage && (
+                <div className="p-3 bg-rose-950/80 border border-rose-600 text-rose-200 text-xs rounded-lg flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />
+                  <span>{errorMessage}</span>
                 </div>
               )}
             </form>
@@ -250,8 +275,8 @@ export function GuestbookBlock({
             </div>
 
             {wishes.length === 0 ? (
-              <div className="text-center py-12 text-gray-500 bg-neutral-900/40 rounded-2xl border border-dashed border-neutral-800">
-                Belum ada ucapan. Jadilah yang pertama memberikan ulasan!
+              <div className="text-center py-12 text-gray-500 bg-neutral-900/40 rounded-xl border border-dashed border-neutral-800">
+                No wishes yet. Be the first to leave one!
               </div>
             ) : (
               <div className="space-y-3 max-h-[460px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-neutral-800">
@@ -274,7 +299,7 @@ export function GuestbookBlock({
                     </p>
                     <div className="text-[10px] text-gray-400 pl-9 mt-2 flex items-center gap-1">
                       <Clock className="w-3 h-3" />
-                      <span>{new Date(w.created_at).toLocaleString("id-ID")}</span>
+                      <span>{new Date(w.created_at).toLocaleString("en-US")}</span>
                     </div>
                   </div>
                 ))}

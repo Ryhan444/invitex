@@ -6,7 +6,6 @@ import {
   Film,
   Sparkles,
   Send,
-  ShieldCheck,
   Menu,
   X,
   Share2,
@@ -37,16 +36,19 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleCopyLink = () => {
-    if (typeof window !== "undefined") {
-      navigator.clipboard.writeText(window.location.href);
-      setCopiedLink(true);
-      setTimeout(() => setCopiedLink(false), 2500);
-    }
+    navigator.clipboard
+      ?.writeText(window.location.href)
+      .then(() => {
+        setCopiedLink(true);
+        setTimeout(() => setCopiedLink(false), 2500);
+      })
+      .catch(() => undefined);
   };
 
   const scrollToSection = (id: string) => {
@@ -94,7 +96,7 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
           )}
         </div>
 
-        {/* ----------------- INVITATION NAVBAR (NO ADMIN / NO BUAT UNDANGAN) ----------------- */}
+        {/* Invitation navbar: on-page sections only */}
         {isInvitation ? (
           <>
             {/* Desktop Navigation for Invitation Viewers */}
@@ -111,14 +113,14 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
                 className="hover:text-white transition-colors duration-200 flex items-center gap-1.5"
               >
                 <Calendar className="w-4 h-4 text-netflix-red" />
-                Jadwal & Lokasi
+                Schedule & Venue
               </button>
               <button
                 onClick={() => scrollToSection("guestbook")}
                 className="hover:text-white transition-colors duration-200 flex items-center gap-1.5"
               >
                 <MessageSquare className="w-4 h-4 text-netflix-red" />
-                Kirim Ucapan
+                Send Wishes
               </button>
             </div>
 
@@ -131,12 +133,12 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
                 {copiedLink ? (
                   <>
                     <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">Tersalin!</span>
+                    <span className="text-emerald-400">Copied!</span>
                   </>
                 ) : (
                   <>
                     <Share2 className="w-3.5 h-3.5 text-netflix-red" />
-                    <span>Bagikan Undangan</span>
+                    <span>Share Invitation</span>
                   </>
                 )}
               </button>
@@ -147,7 +149,8 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
               <button
                 onClick={handleCopyLink}
                 className="p-2 rounded-lg bg-neutral-900/90 border border-neutral-800 text-gray-200 hover:text-white"
-                title="Salin Tautan"
+                title="Copy link"
+                aria-label="Copy invitation link"
               >
                 {copiedLink ? (
                   <Check className="w-4 h-4 text-emerald-400" />
@@ -158,14 +161,14 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="text-gray-300 hover:text-white p-2 rounded-lg bg-neutral-900/90 border border-neutral-800"
-                aria-label="Toggle Section Menu"
+                aria-label="Toggle section menu"
               >
                 {mobileMenuOpen ? <X className="w-5 h-5 text-netflix-red" /> : <Menu className="w-5 h-5" />}
               </button>
             </div>
           </>
         ) : (
-          /* ----------------- GENERAL PUBLIC NAVBAR (HOME / REQUEST) ----------------- */
+          /* Public navbar (home / request) */
           <>
             {/* Desktop Nav Links */}
             <div className="hidden md:flex items-center space-x-7 text-sm font-medium text-gray-300">
@@ -181,21 +184,14 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
                 className="hover:text-white transition-colors duration-200 flex items-center gap-1.5"
               >
                 <Sparkles className="w-4 h-4 text-amber-400" />
-                Demo Undangan
+                Demo
               </Link>
               <Link
                 href="/request"
                 className="hover:text-white transition-colors duration-200 flex items-center gap-1.5"
               >
                 <Send className="w-4 h-4 text-netflix-red" />
-                Request Undangan
-              </Link>
-              <Link
-                href="/admin/login"
-                className="hover:text-white transition-colors duration-200 flex items-center gap-1.5 text-gray-400"
-              >
-                <ShieldCheck className="w-4 h-4" />
-                Admin Portal
+                Request
               </Link>
             </div>
 
@@ -205,7 +201,7 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
                 href="/request"
                 className="bg-netflix-red hover:bg-netflix-redHover text-white px-4 py-2 rounded-lg text-sm font-bold tracking-wide shadow-lg hover:shadow-red-900/40 transition-all duration-200 transform hover:-translate-y-0.5"
               >
-                Buat Undangan Sekarang
+                Create Your Invitation
               </Link>
             </div>
 
@@ -213,7 +209,7 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden text-gray-300 hover:text-white p-2 rounded-lg bg-neutral-900/90 border border-neutral-800"
-              aria-label="Toggle Navigation Menu"
+              aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5 text-netflix-red" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -223,54 +219,54 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-netflix-dark/95 backdrop-blur-xl border-b border-netflix-border px-4 pt-3 pb-6 space-y-2.5 mt-2 animate-in slide-in-from-top-2 duration-200">
+        <div className="md:hidden bg-netflix-dark/95 backdrop-blur-xl border-b border-netflix-border px-4 pt-3 pb-6 space-y-2.5 mt-2 ">
           {isInvitation ? (
-            /* Invitation Mobile Navigation: Only on-page sections, NO Admin, NO Create */
+            /* Invitation mobile navigation: on-page sections only */
             <div className="space-y-1">
               <div className="text-[10px] font-bold uppercase tracking-widest text-netflix-red px-2 py-1">
-                Navigasi Undangan
+                Sections
               </div>
               <button
                 onClick={() => scrollToSection("invitation-hero")}
                 className="w-full text-left flex items-center gap-2.5 py-2.5 px-3 rounded-lg text-sm font-medium text-gray-200 hover:text-white hover:bg-neutral-800"
               >
                 <Film className="w-4 h-4 text-netflix-red" />
-                <span>Opening Billboard & Cover</span>
+                <span>Cover</span>
               </button>
               <button
                 onClick={() => scrollToSection("story")}
                 className="w-full text-left flex items-center gap-2.5 py-2.5 px-3 rounded-lg text-sm font-medium text-gray-200 hover:text-white hover:bg-neutral-800"
               >
                 <Heart className="w-4 h-4 text-netflix-red" />
-                <span>Episodes & Love Story</span>
+                <span>Our Story</span>
               </button>
               <button
                 onClick={() => scrollToSection("schedule")}
                 className="w-full text-left flex items-center gap-2.5 py-2.5 px-3 rounded-lg text-sm font-medium text-gray-200 hover:text-white hover:bg-neutral-800"
               >
                 <Calendar className="w-4 h-4 text-netflix-red" />
-                <span>Jadwal Premiere & Peta Lokasi</span>
+                <span>Schedule & Venue</span>
               </button>
               <button
                 onClick={() => scrollToSection("gallery")}
                 className="w-full text-left flex items-center gap-2.5 py-2.5 px-3 rounded-lg text-sm font-medium text-gray-200 hover:text-white hover:bg-neutral-800"
               >
                 <Camera className="w-4 h-4 text-netflix-red" />
-                <span>Galeri Box Office</span>
+                <span>Gallery</span>
               </button>
               <button
                 onClick={() => scrollToSection("donation")}
                 className="w-full text-left flex items-center gap-2.5 py-2.5 px-3 rounded-lg text-sm font-medium text-gray-200 hover:text-white hover:bg-neutral-800"
               >
                 <Gift className="w-4 h-4 text-netflix-red" />
-                <span>Tanda Kasih & Kado Digital</span>
+                <span>Digital Gifts</span>
               </button>
               <button
                 onClick={() => scrollToSection("guestbook")}
                 className="w-full text-left flex items-center gap-2.5 py-2.5 px-3 rounded-lg text-sm font-medium text-gray-200 hover:text-white hover:bg-neutral-800"
               >
                 <MessageSquare className="w-4 h-4 text-netflix-red" />
-                <span>RSVP & Live Chat Ucapan Doa</span>
+                <span>RSVP & Wishes</span>
               </button>
               <div className="pt-2 border-t border-neutral-800">
                 <button
@@ -280,12 +276,12 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
                   {copiedLink ? (
                     <>
                       <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      <span className="text-emerald-400">Tautan Berhasil Tersalin!</span>
+                      <span className="text-emerald-400">Link copied!</span>
                     </>
                   ) : (
                     <>
                       <Share2 className="w-3.5 h-3.5 text-netflix-red" />
-                      <span>Salin & Bagikan Tautan Undangan</span>
+                      <span>Copy Invitation Link</span>
                     </>
                   )}
                 </button>
@@ -306,7 +302,7 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
                 onClick={() => setMobileMenuOpen(false)}
                 className="block py-2.5 px-3 rounded-lg text-sm font-medium text-gray-200 hover:text-white hover:bg-neutral-800"
               >
-                Demo Undangan (Reza & Amanda)
+                Wedding Demo (Reza & Amanda)
               </Link>
               <Link
                 href="/chapter-25-kevin"
@@ -320,14 +316,7 @@ export function Navbar({ customTitle, isInvitation = false }: NavbarProps) {
                 onClick={() => setMobileMenuOpen(false)}
                 className="block py-2.5 px-3 rounded-lg text-sm font-bold text-netflix-red bg-netflix-red/10 border border-netflix-red/20"
               >
-                Request Undangan Baru
-              </Link>
-              <Link
-                href="/admin/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2.5 px-3 rounded-lg text-xs font-medium text-gray-400 hover:text-gray-200 border-t border-neutral-800 mt-2"
-              >
-                Admin Portal (Studio Login)
+                Request an Invitation
               </Link>
             </>
           )}

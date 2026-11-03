@@ -64,6 +64,12 @@ export async function getAllEvents(): Promise<EventItem[]> {
   }
 }
 
+/** Public listing: only published events. */
+export async function getPublishedEvents(): Promise<EventItem[]> {
+  const events = await getAllEvents();
+  return events.filter((e) => e.is_published);
+}
+
 export async function getEventById(id: string): Promise<EventItem | null> {
   if (!isSupabaseConfigured()) {
     const found = Object.values(memoryEvents).find((e) => e.id === id);
@@ -281,7 +287,7 @@ export async function updateRequestStatus(
               title: req.payload_data.event_title || req.client_name,
               subtitle: req.payload_data.notes || "You are cordially invited to celebrate with us.",
               backdrop_url: req.payload_data.backdrop_url || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2000&q=80",
-              cta_text: "Buka Undangan (Play)",
+              cta_text: "Open Invitation",
               rating: "99% Match",
               year: new Date().getFullYear().toString(),
               season: "Season 1",
@@ -295,7 +301,7 @@ export async function updateRequestStatus(
             is_visible: true,
             content: {
               heading: "GUEST WISHES & RSVP",
-              subheading: "Tinggalkan doa dan konfirmasi kehadiran Anda.",
+              subheading: "Leave your wishes and confirm your attendance.",
               rsvp_enabled: true,
             },
           },

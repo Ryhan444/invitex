@@ -5,16 +5,17 @@ import Link from "next/link";
 import { Navbar } from "@/components/netflix-ui/Navbar";
 import {
   Send,
-  Sparkles,
-  Calendar,
   Film,
   CheckCircle2,
-  Layers,
-  ArrowRight,
-  ShieldCheck,
-  ImageIcon,
 } from "lucide-react";
 import { SectionType } from "@/types";
+
+const toSlug = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
 
 export default function RequestPortalPage() {
   const [clientName, setClientName] = useState("");
@@ -45,37 +46,37 @@ export default function RequestPortalPage() {
     {
       id: "banner",
       title: "Cinematic Hero Billboard",
-      desc: "Banner utama, judul film, backdrop, dan tombol play buka undangan.",
+      desc: "Main banner with your title, backdrop image and a play button to open the invitation.",
     },
     {
       id: "story",
       title: "Story / Episodes Block",
-      desc: "Rundown cerita pertemuan dalam bentuk episode film.",
+      desc: "Your story told as a series of film episodes.",
     },
     {
       id: "schedule",
       title: "Schedule & Countdown Timer",
-      desc: "Waktu akad/resepsi/pesta, countdown realtime, dan add to Google Calendar.",
+      desc: "Ceremony and reception times, a live countdown and Add to Google Calendar.",
     },
     {
       id: "maps",
       title: "Interactive Maps & Venue",
-      desc: "Lokasi akurat dan navigasi Google Maps langsung di undangan.",
+      desc: "Exact venue location with Google Maps directions.",
     },
     {
       id: "gallery",
       title: "Gallery & Trailers",
-      desc: "Galeri foto & video cinematic dengan viewer fullscreen.",
+      desc: "Cinematic photo and video gallery with a fullscreen viewer.",
     },
     {
       id: "donation",
-      title: "Digital Gift & QRIS Box Office",
-      desc: "Nomor rekening bank, dompet digital, dan scan barcode QRIS.",
+      title: "Digital Gifts & QRIS",
+      desc: "Bank accounts, e-wallets and a scannable QRIS code.",
     },
     {
       id: "guestbook",
       title: "Live Guestbook & Realtime RSVP",
-      desc: "Form ucapan live stream dan konfirmasi kehadiran realtime.",
+      desc: "Live wishes feed and real-time attendance confirmation.",
     },
   ];
 
@@ -105,9 +106,7 @@ export default function RequestPortalPage() {
           payload_data: {
             event_title: eventTitle || `${clientName}'s Premiere`,
             target_date: targetDate,
-            preferred_slug: preferredSlug
-              ? preferredSlug.toLowerCase().replace(/[^a-z0-9]+/g, "-")
-              : "",
+            preferred_slug: toSlug(preferredSlug),
             notes,
             backdrop_url: backdropUrl,
             selected_blocks: selectedBlocks,
@@ -115,14 +114,16 @@ export default function RequestPortalPage() {
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data.error || "Gagal mengirim permohonan");
+        setErrorMsg(data.error || "We couldn't submit your request. Please try again.");
+        return;
       }
 
       setSubmittedSuccess(true);
-    } catch (err: any) {
-      setErrorMsg(err.message || "Terjadi kesalahan saat memproses permohonan.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch {
+      setErrorMsg("Unable to reach the server. Please check your connection and try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -138,14 +139,14 @@ export default function RequestPortalPage() {
           <div className="inline-flex items-center gap-2 bg-netflix-red/10 border border-netflix-red/30 px-3.5 py-1 rounded-full mb-3">
             <Film className="w-4 h-4 text-netflix-red" />
             <span className="text-xs font-bold text-netflix-red uppercase tracking-widest">
-              Portal Pembuatan Undangan
+              Invitation Request
             </span>
           </div>
           <h1 className="text-2xl sm:text-5xl font-black uppercase tracking-tight text-white font-serif">
-            REQUEST YOUR CINEMATIC INVITATION
+            Request your cinematic invitation
           </h1>
           <p className="text-xs sm:text-base text-gray-400 mt-2 sm:mt-3 max-w-xl mx-auto">
-            Isi formulir di bawah ini. Tim kami akan menyiapkan storyboard dan merilis premiere undangan digital eksklusif Anda.
+            Fill in the form below. Our team will prepare the storyboard and launch your exclusive digital invitation.
           </p>
         </div>
 
@@ -155,24 +156,24 @@ export default function RequestPortalPage() {
               <CheckCircle2 className="w-8 h-8 sm:w-9 sm:h-9" />
             </div>
             <h2 className="text-xl sm:text-3xl font-black text-white uppercase font-serif mb-3">
-              PERMOHONAN BERHASIL DIKIRIM!
+              Request submitted!
             </h2>
             <p className="text-xs sm:text-sm text-gray-300 mb-6 sm:mb-8 leading-relaxed">
-              Terima kasih, <strong className="text-white">{clientName}</strong>. Pengajuan undangan dengan judul &ldquo;<strong className="text-white">{eventTitle || "Acara Anda"}</strong>&rdquo; telah kami terima dengan status <span className="bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-mono font-bold">PENDING</span>.
-              Tim admin Inviteflix akan segera menghubungi via WhatsApp di <strong className="text-white">{clientPhone}</strong>.
+              Thank you, <strong className="text-white">{clientName}</strong>. We&apos;ve received your request for &ldquo;<strong className="text-white">{eventTitle || "your event"}</strong>&rdquo; and it is now <span className="bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-mono font-bold">PENDING</span> review.
+              Our team will contact you on WhatsApp at <strong className="text-white">{clientPhone}</strong> shortly.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/reza-amanda-wedding"
                 className="bg-netflix-red hover:bg-netflix-redHover text-white px-6 py-3 rounded-xl font-bold text-sm text-center"
               >
-                Lihat Contoh Undangan
+                View a Sample Invitation
               </Link>
               <Link
                 href="/"
                 className="bg-neutral-800 hover:bg-neutral-700 text-gray-300 px-6 py-3 rounded-xl font-medium text-sm border border-neutral-700 text-center"
               >
-                Kembali ke Beranda
+                Back to Home
               </Link>
             </div>
           </div>
@@ -182,55 +183,62 @@ export default function RequestPortalPage() {
             className="bg-netflix-dark/80 border border-netflix-border/80 rounded-2xl p-4 sm:p-10 shadow-2xl space-y-6 sm:space-y-8"
           >
             {errorMsg && (
-              <div className="p-3.5 sm:p-4 bg-red-950/80 border border-netflix-red text-red-200 text-xs sm:text-sm rounded-xl">
+              <div role="alert" className="p-3.5 sm:p-4 bg-red-950/80 border border-netflix-red text-red-200 text-xs sm:text-sm rounded-xl">
                 {errorMsg}
               </div>
             )}
 
-            {/* Section 1: Client Information */}
+            {/* Section 1: Contact */}
             <div>
               <h3 className="text-base sm:text-lg font-bold text-white mb-4 flex items-center gap-2 border-b border-netflix-border pb-2">
                 <span className="w-6 h-6 rounded-full bg-netflix-red text-white flex items-center justify-center text-xs font-black">
                   1
                 </span>
-                Informasi Kontak Pemesan
+                Your Contact Details
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                    Nama Lengkap / Kontak *
+                    Full Name *
                   </label>
                   <input
                     type="text"
                     required
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
-                    placeholder="Contoh: Reza Rahardian"
+                    maxLength={100}
+                    autoComplete="name"
+                    placeholder="e.g. Reza Rahardian"
                     className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                    Email Aktif *
+                    Email *
                   </label>
                   <input
                     type="email"
                     required
                     value={clientEmail}
                     onChange={(e) => setClientEmail(e.target.value)}
-                    placeholder="nama@email.com"
+                    maxLength={254}
+                    autoComplete="email"
+                    placeholder="you@example.com"
                     className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   />
                 </div>
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                    Nomor WhatsApp *
+                    WhatsApp Number *
                   </label>
                   <input
                     type="tel"
                     required
                     value={clientPhone}
                     onChange={(e) => setClientPhone(e.target.value)}
+                    maxLength={20}
+                    pattern="\+?[0-9\s\-]{8,20}"
+                    autoComplete="tel"
                     placeholder="081234567890"
                     className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   />
@@ -244,29 +252,29 @@ export default function RequestPortalPage() {
                 <span className="w-6 h-6 rounded-full bg-netflix-red text-white flex items-center justify-center text-xs font-black">
                   2
                 </span>
-                Detail Acara & Judul Film
+                Event Details
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                    Tipe Acara *
+                    Event Type *
                   </label>
                   <select
                     value={eventType}
                     onChange={(e) => setEventType(e.target.value)}
                     className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   >
-                    <option value="wedding">Pernikahan (Wedding Premiere)</option>
-                    <option value="birthday">Ulang Tahun (Birthday Bash)</option>
-                    <option value="graduation">Wisuda / Kelulusan</option>
-                    <option value="seminar">Seminar / Konferensi</option>
-                    <option value="party">VIP Party / Gala Night</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="birthday">Birthday</option>
+                    <option value="graduation">Graduation</option>
+                    <option value="seminar">Seminar / Conference</option>
+                    <option value="party">Party / Gala Night</option>
                     <option value="anniversary">Anniversary</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                    Tanggal Penayangan Acara *
+                    Event Date & Time *
                   </label>
                   <input
                     type="datetime-local"
@@ -278,27 +286,29 @@ export default function RequestPortalPage() {
                 </div>
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                    Judul Acara / Movie Title *
+                    Event Title *
                   </label>
                   <input
                     type="text"
                     required
                     value={eventTitle}
                     onChange={(e) => setEventTitle(e.target.value)}
-                    placeholder="Contoh: Reza & Amanda: The Beginning of Forever"
+                    maxLength={150}
+                    placeholder="e.g. Reza & Amanda: The Beginning of Forever"
                     className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                    Request URL Slug Khusus (Opsional)
+                    Custom Link (optional)
                   </label>
                   <div className="flex items-center bg-neutral-900 border border-netflix-border rounded-xl px-3">
                     <span className="text-xs text-gray-500 font-mono">inviteflix.com/</span>
                     <input
                       type="text"
                       value={preferredSlug}
-                      onChange={(e) => setPreferredSlug(e.target.value)}
+                      onChange={(e) => setPreferredSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"))}
+                      maxLength={80}
                       placeholder="reza-amanda"
                       className="w-full bg-transparent py-2.5 text-base sm:text-sm text-white focus:outline-none font-mono"
                     />
@@ -306,29 +316,30 @@ export default function RequestPortalPage() {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                    URL Foto Cover / Backdrop (Opsional)
+                    Cover Photo URL (optional)
                   </label>
                   <input
                     type="url"
                     value={backdropUrl}
                     onChange={(e) => setBackdropUrl(e.target.value)}
-                    placeholder="https://images.unsplash.com/photo-..."
+                    maxLength={2048}
+                    placeholder="https://…"
                     className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Section 3: Dynamic Blocks Selection */}
+            {/* Section 3: Sections */}
             <div>
               <h3 className="text-base sm:text-lg font-bold text-white mb-2 flex items-center gap-2 border-b border-netflix-border pb-2">
                 <span className="w-6 h-6 rounded-full bg-netflix-red text-white flex items-center justify-center text-xs font-black">
                   3
                 </span>
-                Pilih Blok Komponen Undangan
+                Choose Your Sections
               </h3>
               <p className="text-xs text-gray-400 mb-4">
-                Centang blok yang ingin Anda sertakan di dalam undangan film Anda:
+                Select the sections you want to include in your invitation:
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -367,13 +378,14 @@ export default function RequestPortalPage() {
             {/* Section 4: Notes */}
             <div>
               <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-                Catatan Khusus / Ringkasan Cerita untuk Tim Produksi
+                Notes for Our Team
               </label>
               <textarea
                 rows={3}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Ceritakan gambaran singkat kisah cinta, request lagu latar, atau petunjuk khusus untuk admin..."
+                maxLength={2000}
+                placeholder="Share a short version of your story, a song request, or any special instructions…"
                 className="w-full bg-neutral-900 border border-netflix-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-netflix-red resize-none"
               />
             </div>
@@ -387,11 +399,11 @@ export default function RequestPortalPage() {
               >
                 <Send className="w-5 h-5" />
                 {isSubmitting
-                  ? "Mengirimkan Pengajuan..."
-                  : "Kirim Permohonan Undangan Sekarang"}
+                  ? "Submitting…"
+                  : "Submit Request"}
               </button>
               <p className="text-[11px] text-gray-500 text-center mt-3">
-                Dengan menekan tombol di atas, Anda mengajukan permohonan ke tim kurasi Inviteflix. Tidak ada pembayaran langsung di muka.
+                Submitting this form sends your request to the Inviteflix team. No upfront payment is required.
               </p>
             </div>
           </form>

@@ -3,10 +3,24 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PlusCircle, Film, ArrowLeft, Sparkles, Check } from "lucide-react";
+import { PlusCircle, ArrowLeft } from "lucide-react";
+import { useAdminHref } from "@/components/admin/AdminPathContext";
+
+const SESSION_EXPIRED_MSG = "Your session has expired. Please sign in again.";
+const GENERIC_ERROR_MSG = "Something went wrong while creating the event. Please try again.";
+
+// Slugs: lowercase letters, numbers and hyphens only, 3-80 chars (enforced by the API)
+const sanitizeSlug = (val: string) =>
+  val
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, "-")
+    .replace(/-{2,}/g, "-")
+    .replace(/^-+/, "")
+    .slice(0, 80);
 
 export default function CreateEventPage() {
   const router = useRouter();
+  const adminHref = useAdminHref();
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [eventType, setEventType] = useState("wedding");
@@ -21,17 +35,19 @@ export default function CreateEventPage() {
 
   const handleSlugify = (val: string) => {
     setTitle(val);
-    setSlug(
-      val
-        .toLowerCase()
-        .replace(/[^a-z0-9 ]/g, "")
-        .replace(/ +/g, "-")
-    );
+    setSlug(sanitizeSlug(val.trim()).replace(/-+$/, ""));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
+
+    const finalSlug = slug.replace(/-+$/, "");
+    if (finalSlug.length < 3) {
+      setErrorMsg("The slug must be 3-80 characters: lowercase letters, numbers and hyphens only.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -40,7 +56,7 @@ export default function CreateEventPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
-          slug,
+          slug: finalSlug,
           event_type: eventType,
           event_date: eventDate,
           theme_config: {
@@ -57,14 +73,16 @@ export default function CreateEventPage() {
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data.error || "Gagal membuat event");
+        setErrorMsg(res.status === 404 ? SESSION_EXPIRED_MSG : data?.error || GENERIC_ERROR_MSG);
+        return;
       }
 
-      router.push("/admin/dashboard");
-    } catch (err: any) {
-      setErrorMsg(err.message || "Gagal membuat acara.");
+      router.push(adminHref("/dashboard"));
+    } catch (err) {
+      console.error("Create event error:", err);
+      setErrorMsg(GENERIC_ERROR_MSG);
     } finally {
       setIsSubmitting(false);
     }
@@ -74,24 +92,25 @@ export default function CreateEventPage() {
     <div className="max-w-3xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <Link
-          href="/admin/dashboard"
+          href={adminHref("/dashboard")}
+          aria-label="Back to dashboard"
           className="p-2 rounded-lg bg-neutral-900 border border-neutral-800 text-gray-400 hover:text-white flex-shrink-0"
         >
           <ArrowLeft className="w-4 h-4" />
         </Link>
         <div className="min-w-0">
           <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white font-serif truncate">
-            BUAT UNDANGAN BARU (MANUAL CREATOR)
+            CREATE NEW INVITATION (MANUAL CREATOR)
           </h1>
           <p className="text-xs text-gray-400 truncate">
-            Daftarkan judul acara baru ke database Inviteflix.
+            Register a new event title in the Inviteflix database.
           </p>
         </div>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-netflix-dark/90 border border-netflix-border/80 rounded-2xl p-4 sm:p-8 shadow-2xl space-y-5"
+        className="bg-netflix-dark/90 border border-netflix-border/80 rounded-xl p-4 sm:p-8 shadow-2xl space-y-5"
       >
         {errorMsg && (
           <div className="p-3 bg-red-950/80 border border-netflix-red text-red-200 text-xs rounded-lg">
@@ -101,30 +120,36 @@ export default function CreateEventPage() {
 
         <div>
           <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-            Judul Acara / Movie Title *
+            Event / Movie Title *
           </label>
           <input
             type="text"
             required
+            maxLength={150}
             value={title}
             onChange={(e) => handleSlugify(e.target.value)}
-            placeholder="Contoh: Sarah & Michael Wedding Premiere"
+            placeholder="e.g. Sarah & Michael Wedding Premiere"
             className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
           />
         </div>
 
         <div>
           <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-            Slug URL Eksklusif *
+            Custom URL Slug *
           </label>
           <div className="flex items-center bg-neutral-900 border border-netflix-border rounded-xl px-3">
             <span className="text-xs text-gray-500 font-mono">inviteflix.com/</span>
             <input
               type="text"
               required
+              minLength={3}
+              maxLength={80}
+              pattern="[a-z0-9-]{3,80}"
+              title="3-80 characters: lowercase letters, numbers and hyphens only"
               value={slug}
-              onChange={(e) => setSlug(e.target.value)}
-              className="w-full bg-transparent py-2.5 text-base sm:text-sm text-white focus:outline-none font-mono"
+              onChange={(e) => setSlug(sanitizeSlug(e.target.value))}
+              placeholder="sarah-michael-wedding"
+              className="w-full bg-transparent py-2.5 text-base sm:text-sm text-white focus:outline-none font-mono placeholder:text-neutral-600"
             />
           </div>
         </div>
@@ -132,16 +157,16 @@ export default function CreateEventPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-              Kategori Acara
+              Event Category
             </label>
             <select
               value={eventType}
               onChange={(e) => setEventType(e.target.value)}
               className="w-full bg-neutral-900 border border-netflix-border rounded-xl px-3.5 py-2.5 text-base sm:text-sm text-white focus:outline-none focus:border-netflix-red"
             >
-              <option value="wedding">Wedding (Pernikahan)</option>
-              <option value="birthday">Birthday (Ulang Tahun)</option>
-              <option value="graduation">Graduation (Wisuda)</option>
+              <option value="wedding">Wedding</option>
+              <option value="birthday">Birthday</option>
+              <option value="graduation">Graduation</option>
               <option value="seminar">Seminar / Summit</option>
               <option value="party">VIP Party</option>
             </select>
@@ -149,7 +174,7 @@ export default function CreateEventPage() {
 
           <div>
             <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-              Tanggal Penayangan Acara
+              Event Date & Time
             </label>
             <input
               type="datetime-local"
@@ -163,7 +188,7 @@ export default function CreateEventPage() {
 
         <div>
           <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-            URL Musik Latar (MP3)
+            Background Music URL (MP3)
           </label>
           <input
             type="url"
@@ -175,7 +200,7 @@ export default function CreateEventPage() {
 
         <div>
           <label className="block text-xs font-semibold text-gray-300 mb-1.5">
-            Judul Soundtrack Musik
+            Soundtrack Title
           </label>
           <input
             type="text"
@@ -194,7 +219,7 @@ export default function CreateEventPage() {
             className="w-4 h-4 rounded text-netflix-red focus:ring-netflix-red accent-netflix-red"
           />
           <label htmlFor="published" className="text-xs font-semibold text-gray-200">
-            Publikasikan langsung (Tamu dapat mengakses halaman /[slug])
+            Publish immediately (guests can access the /[slug] page)
           </label>
         </div>
 
@@ -205,7 +230,7 @@ export default function CreateEventPage() {
             className="w-full bg-netflix-red hover:bg-netflix-redHover text-white font-bold py-3.5 rounded-xl text-sm shadow-xl shadow-red-900/30 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <PlusCircle className="w-4 h-4" />
-            {isSubmitting ? "Menyimpan Acara..." : "Simpan & Lanjutkan ke Edit Blok"}
+            {isSubmitting ? "Saving Event..." : "Save & Continue to Edit Blocks"}
           </button>
         </div>
       </form>

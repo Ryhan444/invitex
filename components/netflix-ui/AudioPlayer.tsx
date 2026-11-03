@@ -23,10 +23,8 @@ export function AudioPlayer({
       audioRef.current
         .play()
         .then(() => setIsPlaying(true))
-        .catch((err) => {
-          // Autoplay policy might block unmuted audio initially until guest interaction
-          console.log("Audio play blocked by browser policy:", err);
-        });
+        // Browsers may block autoplay until the guest interacts with the page.
+        .catch(() => undefined);
     }
   }, [autoPlayTrigger]);
 
@@ -39,7 +37,7 @@ export function AudioPlayer({
       audioRef.current
         .play()
         .then(() => setIsPlaying(true))
-        .catch((err) => console.log("Play failed:", err));
+        .catch(() => undefined);
     }
   };
 
@@ -65,7 +63,7 @@ export function AudioPlayer({
               : "bg-neutral-800 text-gray-300 hover:text-white"
           }`}
           title={isPlaying ? "Pause Music" : "Play Music"}
-          aria-label="Toggle Background Music"
+          aria-label={isPlaying ? "Pause music" : "Play music"}
         >
           {isPlaying ? (
             <Disc className="w-5 h-5 animate-spin" style={{ animationDuration: "3s" }} />
@@ -88,7 +86,7 @@ export function AudioPlayer({
               </div>
             )}
           </div>
-          <span className="text-[9px] text-gray-400">Inviteflix Audio Engine</span>
+          <span className="text-[9px] text-gray-400">Now playing</span>
         </div>
 
         {/* Mute button */}
@@ -96,6 +94,7 @@ export function AudioPlayer({
           onClick={toggleMute}
           className="text-gray-400 hover:text-white p-1 transition-colors"
           title={isMuted ? "Unmute" : "Mute"}
+          aria-label={isMuted ? "Unmute" : "Mute"}
         >
           {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4" />}
         </button>

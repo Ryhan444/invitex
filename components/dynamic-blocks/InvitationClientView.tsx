@@ -5,7 +5,7 @@ import { BlockRenderer } from "./BlockRenderer";
 import { AudioPlayer } from "@/components/netflix-ui/AudioPlayer";
 import { Navbar } from "@/components/netflix-ui/Navbar";
 import { EventItem, GuestWish } from "@/types";
-import { UserCheck, Share2, Copy, Check } from "lucide-react";
+import { UserCheck, Share2, Check } from "lucide-react";
 
 interface InvitationClientViewProps {
   event: EventItem;
@@ -49,7 +49,7 @@ export function InvitationClientView({
         <div className="fixed top-16 sm:top-20 left-1/2 -translate-x-1/2 z-40 max-w-[92vw] sm:max-w-md bg-netflix-dark/95 border border-netflix-red/60 text-white px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2 text-xs sm:text-sm animate-pulse-slow">
           <UserCheck className="w-4 h-4 text-netflix-red flex-shrink-0" />
           <span className="truncate">
-            Kepada Yth. Tamu VIP: <strong className="text-white">{guestName}</strong>
+            Dear VIP Guest: <strong className="text-white">{guestName}</strong>
           </span>
         </div>
       )}
@@ -77,17 +77,18 @@ export function InvitationClientView({
         <button
           onClick={handleShareLink}
           className="bg-netflix-dark/95 hover:bg-neutral-800 border border-netflix-border px-3 sm:px-3.5 py-2 rounded-full shadow-2xl text-xs font-semibold text-gray-200 flex items-center gap-2 backdrop-blur-md transition-all active:scale-95"
-          title="Salin Tautan Undangan"
+          title="Copy Invitation Link"
+          aria-label="Copy invitation link"
         >
           {copiedLink ? (
             <>
               <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400">Tersalin!</span>
+              <span className="text-emerald-400">Copied!</span>
             </>
           ) : (
             <>
               <Share2 className="w-3.5 h-3.5 text-netflix-red" />
-              <span className="hidden sm:inline">Bagikan Undangan</span>
+              <span className="hidden sm:inline">Share Invitation</span>
             </>
           )}
         </button>

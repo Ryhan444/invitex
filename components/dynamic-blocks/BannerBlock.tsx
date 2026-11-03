@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { Play, Calendar, MapPin, Heart, Sparkles, Star } from "lucide-react";
+import { Play, Calendar, Heart, Sparkles } from "lucide-react";
 import confetti from "canvas-confetti";
 import { BannerContent } from "@/types";
 
@@ -141,18 +141,18 @@ export function BannerBlock({
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
           <button
             onClick={triggerOpen}
-            className="flex items-center justify-center gap-2.5 bg-netflix-red hover:bg-netflix-redHover text-white px-7 py-3.5 rounded-xl sm:rounded font-black text-sm sm:text-base tracking-wide shadow-2xl hover:shadow-red-600/50 active:scale-98 transition-all duration-200"
+            className="flex items-center justify-center gap-2.5 bg-netflix-red hover:bg-netflix-redHover text-white px-7 py-3.5 rounded-xl font-black text-sm sm:text-base tracking-wide shadow-2xl hover:shadow-red-600/50 active:scale-98 transition-all duration-200"
           >
             <Play className="w-5 h-5 fill-current" />
-            <span>{content.cta_text || "Buka Undangan (Play)"}</span>
+            <span>{content.cta_text || "Open Invitation (Play)"}</span>
           </button>
 
           <a
             href="#schedule"
-            className="flex items-center justify-center gap-2 bg-neutral-800/80 hover:bg-neutral-700 text-white px-6 py-3.5 rounded-xl sm:rounded font-semibold text-sm sm:text-base backdrop-blur-md border border-neutral-700 hover:border-neutral-500 transition-all duration-200"
+            className="flex items-center justify-center gap-2 bg-neutral-800/80 hover:bg-neutral-700 text-white px-6 py-3.5 rounded-xl font-semibold text-sm sm:text-base backdrop-blur-md border border-neutral-700 hover:border-neutral-500 transition-all duration-200"
           >
             <Calendar className="w-4 h-4 text-netflix-red" />
-            <span>Jadwal Acara</span>
+            <span>Event Schedule</span>
           </a>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Gift, Copy, Check, QrCode, CreditCard, MapPin, Sparkles } from "lucide-react";
+import { Gift, Copy, Check, QrCode, CreditCard, MapPin } from "lucide-react";
 import { DonationContent } from "@/types";
 
 interface DonationBlockProps {
@@ -53,7 +53,7 @@ export function DonationBlock({ content }: DonationBlockProps) {
           {accounts.map((acc, idx) => (
             <div
               key={idx}
-              className="relative bg-gradient-to-br from-neutral-900 to-neutral-950 border border-netflix-border/80 hover:border-netflix-red/50 rounded-2xl p-6 shadow-xl transition-all duration-300"
+              className="relative bg-gradient-to-br from-neutral-900 to-neutral-950 border border-netflix-border/80 hover:border-netflix-red/50 rounded-xl p-6 shadow-xl transition-all duration-300"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -66,12 +66,12 @@ export function DonationBlock({ content }: DonationBlockProps) {
               </div>
 
               <div className="my-3">
-                <span className="text-xs text-gray-400 block mb-1">Nomor Rekening / Virtual:</span>
+                <span className="text-xs text-gray-400 block mb-1">Account / Virtual Account Number:</span>
                 <div className="text-xl sm:text-2xl font-black font-mono tracking-wider text-white">
                   {acc.account_number}
                 </div>
                 <div className="text-sm text-gray-300 mt-1">
-                  a.n. <span className="font-semibold text-white">{acc.account_holder}</span>
+                  Account holder: <span className="font-semibold text-white">{acc.account_holder}</span>
                 </div>
               </div>
 
@@ -86,12 +86,12 @@ export function DonationBlock({ content }: DonationBlockProps) {
                 {copiedIndex === idx ? (
                   <>
                     <Check className="w-4 h-4" />
-                    Nomor Rekening Tersalin!
+                    Account Number Copied!
                   </>
                 ) : (
                   <>
                     <Copy className="w-4 h-4" />
-                    Salin Nomor Rekening
+                    Copy Account Number
                   </>
                 )}
               </button>
@@ -103,17 +103,17 @@ export function DonationBlock({ content }: DonationBlockProps) {
         <div className="space-y-4">
           {/* QRIS Accordion / Preview */}
           {content.qris_url && (
-            <div className="bg-netflix-dark/60 border border-netflix-border/80 rounded-2xl p-5 sm:p-6 text-center">
+            <div className="bg-netflix-dark/60 border border-netflix-border/80 rounded-xl p-5 sm:p-6 text-center">
               <button
                 onClick={() => setShowQris(!showQris)}
                 className="w-full flex items-center justify-between text-sm sm:text-base font-bold text-white hover:text-netflix-red transition-colors"
               >
                 <div className="flex items-center gap-2.5">
                   <QrCode className="w-5 h-5 text-netflix-red" />
-                  <span>Kirim Hadiah via QRIS (Semua E-Wallet / Mobile Banking)</span>
+                  <span>Send a Gift via QRIS (All E-Wallets / Mobile Banking)</span>
                 </div>
                 <span className="text-xs text-netflix-red uppercase tracking-wider font-semibold">
-                  {showQris ? "Tutup QRIS" : "Lihat QRIS"}
+                  {showQris ? "Hide QRIS" : "View QRIS"}
                 </span>
               </button>
 
@@ -122,13 +122,13 @@ export function DonationBlock({ content }: DonationBlockProps) {
                   <div className="relative w-56 h-56 sm:w-64 sm:h-64 bg-white p-3 rounded-xl shadow-2xl border-2 border-netflix-red">
                     <Image
                       src={content.qris_url}
-                      alt="QRIS Barcode"
+                      alt="QRIS code"
                       fill
                       className="object-contain p-2"
                     />
                   </div>
                   <p className="text-xs text-gray-400 mt-3">
-                    Scan menggunakan BCA, Mandiri Livin, GoPay, OVO, ShopeePay, atau DANA.
+                    Scan with BCA, Livin' by Mandiri, GoPay, OVO, ShopeePay, or DANA.
                   </p>
                 </div>
               )}
@@ -137,11 +137,11 @@ export function DonationBlock({ content }: DonationBlockProps) {
 
           {/* Physical Gift Mailing Address */}
           {content.gift_address && (
-            <div className="bg-netflix-dark/60 border border-netflix-border/80 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="bg-netflix-dark/60 border border-netflix-border/80 rounded-xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-netflix-red flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-white mb-0.5">Kirim Kado Fisik</h4>
+                  <h4 className="text-sm font-bold text-white mb-0.5">Send a Physical Gift</h4>
                   <p className="text-xs text-gray-300 max-w-lg leading-relaxed">
                     {content.gift_address}
                   </p>
@@ -158,12 +158,12 @@ export function DonationBlock({ content }: DonationBlockProps) {
                 {copiedAddress ? (
                   <>
                     <Check className="w-3.5 h-3.5" />
-                    Alamat Tersalin!
+                    Address Copied!
                   </>
                 ) : (
                   <>
                     <Copy className="w-3.5 h-3.5" />
-                    Salin Alamat
+                    Copy Address
                   </>
                 )}
               </button>

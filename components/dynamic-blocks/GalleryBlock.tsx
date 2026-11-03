@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Camera, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
-import { GalleryContent, GalleryPhoto } from "@/types";
+import { GalleryContent } from "@/types";
 
 interface GalleryBlockProps {
   content: GalleryContent;

@@ -10,12 +10,13 @@ import {
   Calendar,
 } from "lucide-react";
 import { getAllEvents, getAllRequests } from "@/lib/data/events";
+import { getAdminBasePath } from "@/lib/security/session";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  const events = await getAllEvents();
-  const requests = await getAllRequests();
+  const [events, requests] = await Promise.all([getAllEvents(), getAllRequests()]);
+  const base = getAdminBasePath() ?? "";
 
   const totalEvents = events.length;
   const publishedEvents = events.filter((e) => e.is_published).length;
@@ -30,23 +31,23 @@ export default async function AdminDashboardPage() {
             STUDIO DASHBOARD
           </h1>
           <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            Kelola penayangan undangan film digital dan tinjau pengajuan tamu.
+            Manage your published invitations and review incoming client requests.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2.5">
           <Link
-            href="/admin/dashboard/requests"
+            href={`${base}/dashboard/requests`}
             className="flex-1 sm:flex-none justify-center bg-neutral-800 hover:bg-neutral-700 text-gray-200 border border-neutral-700 px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors"
           >
             <Inbox className="w-4 h-4 text-amber-400 flex-shrink-0" />
-            <span>Tinjau Request ({pendingRequests})</span>
+            <span>Review Requests ({pendingRequests})</span>
           </Link>
           <Link
-            href="/admin/dashboard/events/create"
+            href={`${base}/dashboard/events/create`}
             className="flex-1 sm:flex-none justify-center bg-netflix-red hover:bg-netflix-redHover text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-lg shadow-red-900/30"
           >
             <PlusCircle className="w-4 h-4 flex-shrink-0" />
-            <span>Buat Event Baru</span>
+            <span>New Event</span>
           </Link>
         </div>
       </div>
@@ -55,25 +56,25 @@ export default async function AdminDashboardPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="bg-netflix-dark/90 border border-netflix-border/80 rounded-xl p-3.5 sm:p-5 shadow-lg">
           <span className="text-[11px] sm:text-xs font-semibold text-gray-400 block truncate">
-            Total Undangan
+            Total Invitations
           </span>
           <div className="text-2xl sm:text-3xl font-black text-white mt-1 font-mono">
             {totalEvents}
           </div>
           <span className="text-[10px] sm:text-[11px] text-gray-500 mt-1 block truncate">
-            Semua premiere terdaftar
+            All registered events
           </span>
         </div>
 
         <div className="bg-netflix-dark/90 border border-netflix-border/80 rounded-xl p-3.5 sm:p-5 shadow-lg">
           <span className="text-[11px] sm:text-xs font-semibold text-gray-400 block truncate">
-            Status Published
+            Published
           </span>
           <div className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1 font-mono">
             {publishedEvents}
           </div>
           <span className="text-[10px] sm:text-[11px] text-gray-500 mt-1 block truncate">
-            Dapat diakses tamu
+            Visible to guests
           </span>
         </div>
 
@@ -85,7 +86,7 @@ export default async function AdminDashboardPage() {
             {pendingRequests}
           </div>
           <span className="text-[10px] sm:text-[11px] text-gray-500 mt-1 block truncate">
-            Menunggu verifikasi admin
+            Awaiting review
           </span>
         </div>
 
@@ -97,7 +98,7 @@ export default async function AdminDashboardPage() {
             {requests.length}
           </div>
           <span className="text-[10px] sm:text-[11px] text-gray-500 mt-1 block truncate">
-            Dari portal /request
+            Submitted via request form
           </span>
         </div>
       </div>
@@ -107,10 +108,10 @@ export default async function AdminDashboardPage() {
         <div className="p-4 sm:p-5 border-b border-netflix-border flex items-center justify-between">
           <h2 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
             <Film className="w-4 h-4 text-netflix-red" />
-            Daftar Acara & Undangan Aktif
+            Events & Invitations
           </h2>
           <span className="text-xs text-gray-400">
-            {events.length} Judul
+            {events.length} titles
           </span>
         </div>
 
@@ -145,24 +146,25 @@ export default async function AdminDashboardPage() {
               <div className="flex items-center justify-between pt-1">
                 <div className="flex items-center gap-1.5 text-gray-400 text-xs">
                   <Calendar className="w-3.5 h-3.5 text-gray-500" />
-                  <span>{new Date(ev.event_date).toLocaleDateString("id-ID")}</span>
+                  <span>{new Date(ev.event_date).toLocaleDateString("en-US")}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <Link
                     href={`/${ev.slug}`}
                     target="_blank"
+                    rel="noopener noreferrer"
                     className="p-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-gray-200"
-                    title="Buka Halaman Publik"
+                    title="Open public page"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                   </Link>
                   <Link
-                    href={`/admin/dashboard/events/${ev.id}/edit`}
+                    href={`${base}/dashboard/events/${ev.id}/edit`}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-netflix-red text-white text-xs font-bold shadow-md shadow-red-900/30"
                   >
                     <Edit className="w-3.5 h-3.5" />
-                    <span>Edit Blok</span>
+                    <span>Edit Blocks</span>
                   </Link>
                 </div>
               </div>
@@ -175,12 +177,12 @@ export default async function AdminDashboardPage() {
           <table className="w-full text-left text-xs sm:text-sm">
             <thead className="bg-neutral-900/80 text-gray-400 uppercase text-[10px] font-bold tracking-wider border-b border-netflix-border">
               <tr>
-                <th className="py-3.5 px-5">Judul Undangan</th>
-                <th className="py-3.5 px-5">Slug / Tautan</th>
-                <th className="py-3.5 px-5">Kategori</th>
-                <th className="py-3.5 px-5">Tanggal Penayangan</th>
+                <th className="py-3.5 px-5">Title</th>
+                <th className="py-3.5 px-5">Link</th>
+                <th className="py-3.5 px-5">Category</th>
+                <th className="py-3.5 px-5">Event Date</th>
                 <th className="py-3.5 px-5">Status</th>
-                <th className="py-3.5 px-5 text-right">Aksi</th>
+                <th className="py-3.5 px-5 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-netflix-border text-gray-300">
@@ -205,7 +207,7 @@ export default async function AdminDashboardPage() {
                   <td className="py-4 px-5">
                     <div className="flex items-center gap-1.5 text-gray-300 text-xs">
                       <Calendar className="w-3.5 h-3.5 text-gray-500" />
-                      <span>{new Date(ev.event_date).toLocaleDateString("id-ID")}</span>
+                      <span>{new Date(ev.event_date).toLocaleDateString("en-US")}</span>
                     </div>
                   </td>
                   <td className="py-4 px-5">
@@ -225,17 +227,18 @@ export default async function AdminDashboardPage() {
                       <Link
                         href={`/${ev.slug}`}
                         target="_blank"
+                    rel="noopener noreferrer"
                         className="p-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-gray-300 hover:text-white transition-colors"
-                        title="Buka Halaman Publik"
+                        title="Open public page"
                       >
                         <ExternalLink className="w-4 h-4" />
                       </Link>
                       <Link
-                        href={`/admin/dashboard/events/${ev.id}/edit`}
+                        href={`${base}/dashboard/events/${ev.id}/edit`}
                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-netflix-red hover:text-white text-gray-300 text-xs font-semibold transition-all"
                       >
                         <Edit className="w-3.5 h-3.5" />
-                        <span>Edit Blok</span>
+                        <span>Edit Blocks</span>
                       </Link>
                     </div>
                   </td>

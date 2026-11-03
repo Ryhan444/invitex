@@ -19,16 +19,21 @@ export default function AdminRequestsPage() {
   const [filter, setFilter] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(true);
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const fetchRequests = async () => {
     try {
-      const res = await fetch("/api/requests");
-      const json = await res.json();
-      if (json.data) {
+      const res = await fetch("/api/requests", { credentials: "same-origin" });
+      const json = await res.json().catch(() => ({}));
+      if (res.status === 404) {
+        setErrorMsg("Your session has expired. Please sign in again.");
+      } else if (!res.ok) {
+        setErrorMsg(json.error || "Failed to load requests.");
+      } else if (json.data) {
         setRequests(json.data);
       }
-    } catch (err) {
-      console.error("Failed to load requests:", err);
+    } catch {
+      setErrorMsg("Unable to reach the server. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -46,13 +51,19 @@ export default function AdminRequestsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, status: newStatus }),
       });
+      const json = await res.json().catch(() => ({}));
       if (res.ok) {
+        setErrorMsg("");
         setRequests((prev) =>
           prev.map((r) => (r.id === id ? { ...r, status: newStatus } : r))
         );
+      } else if (res.status === 404 && json.error === "Not found.") {
+        setErrorMsg("Your session has expired. Please sign in again.");
+      } else {
+        setErrorMsg(json.error || "Failed to update the request.");
       }
-    } catch (err) {
-      console.error("Error updating status:", err);
+    } catch {
+      setErrorMsg("Unable to reach the server. Please try again.");
     } finally {
       setActionLoadingId(null);
     }
@@ -69,10 +80,10 @@ export default function AdminRequestsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white font-serif">
-            USER REQUESTS & VERIFIKASI
+            CLIENT REQUESTS
           </h1>
           <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            Tinjau data permohonan pembuatan undangan dan otomatiskan pembuatan halaman publik.
+            Review invitation requests and publish approved ones as live pages.
           </p>
         </div>
 
@@ -94,16 +105,22 @@ export default function AdminRequestsPage() {
         </div>
       </div>
 
+      {errorMsg && (
+        <div role="alert" className="p-3.5 bg-red-950/70 border border-netflix-red/60 text-red-200 text-sm rounded-xl">
+          {errorMsg}
+        </div>
+      )}
+
       {/* Requests List */}
       {isLoading ? (
         <div className="text-center py-16 text-gray-500">
           <div className="w-8 h-8 border-2 border-netflix-red border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          Memuat daftar permohonan...
+          Loading requests…
         </div>
       ) : filtered.length === 0 ? (
         <div className="bg-netflix-dark/60 border border-netflix-border rounded-2xl p-10 sm:p-12 text-center text-gray-400">
           <Inbox className="w-10 h-10 text-gray-600 mx-auto mb-3" />
-          Tidak ada permohonan dengan status &ldquo;{filter}&rdquo;.
+          No requests with status &ldquo;{filter}&rdquo;.
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:gap-5">
@@ -136,12 +153,12 @@ export default function AdminRequestsPage() {
                         {req.status}
                       </span>
                       <span className="text-xs font-semibold text-gray-400">
-                        Acara: <strong className="text-white capitalize">{req.event_type}</strong>
+                        Event: <strong className="text-white capitalize">{req.event_type}</strong>
                       </span>
                       <span className="text-xs text-gray-500">•</span>
                       <span className="text-xs text-gray-400 flex items-center gap-1">
                         <Clock className="w-3 h-3 text-gray-500" />
-                        {new Date(req.created_at).toLocaleDateString("id-ID")}
+                        {new Date(req.created_at).toLocaleDateString("en-US")}
                       </span>
                     </div>
 
@@ -152,7 +169,7 @@ export default function AdminRequestsPage() {
                     {/* Client contacts */}
                     <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs text-gray-300">
                       <span className="font-semibold text-white">
-                        Pemesan: {req.client_name}
+                        Client: {req.client_name}
                       </span>
                       <a
                         href={`mailto:${req.client_email}`}
@@ -164,7 +181,7 @@ export default function AdminRequestsPage() {
                       <a
                         href={`https://wa.me/${req.client_phone.replace(/[^0-9]/g, "")}`}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="flex items-center gap-1 text-emerald-400 hover:underline"
                       >
                         <Phone className="w-3.5 h-3.5" />
@@ -176,7 +193,7 @@ export default function AdminRequestsPage() {
                     {payload.target_date && (
                       <div className="flex items-center gap-2 text-xs text-gray-300">
                         <Calendar className="w-3.5 h-3.5 text-netflix-red" />
-                        <span>Target Premiere: {new Date(payload.target_date).toLocaleString("id-ID")}</span>
+                        <span>Event date: {new Date(payload.target_date).toLocaleString("en-US")}</span>
                       </div>
                     )}
 
@@ -212,14 +229,14 @@ export default function AdminRequestsPage() {
                           className="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-lg"
                         >
                           <CheckCircle2 className="w-4 h-4" />
-                          <span>Setujui & Generate</span>
+                          <span>Approve & Publish</span>
                         </button>
                         <button
                           onClick={() => handleUpdateStatus(req.id, "rejected")}
                           disabled={actionLoadingId === req.id}
                           className="w-full bg-neutral-800 hover:bg-rose-950 hover:text-rose-300 text-gray-400 font-semibold py-2 px-4 rounded-xl text-xs border border-neutral-700 transition-colors"
                         >
-                          Tolak Permohonan
+                          Reject
                         </button>
                       </>
                     )}
@@ -232,22 +249,22 @@ export default function AdminRequestsPage() {
                           className="w-full bg-netflix-red hover:bg-netflix-redHover text-white font-bold py-2 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow"
                         >
                           <ExternalLink className="w-4 h-4" />
-                          <span>Lihat Undangan Live</span>
+                          <span>View Live Invitation</span>
                         </Link>
                         <span className="text-[10px] text-emerald-400 block text-center font-medium">
-                          ✓ Berhasil di-generate & tayang
+                          ✓ Published and live
                         </span>
                       </div>
                     )}
 
                     <a
-                      href={`https://wa.me/${req.client_phone.replace(/[^0-9]/g, "")}?text=Halo%20${encodeURIComponent(req.client_name)},%20kami%20dari%20Inviteflix%20ingin%20mengonfirmasi%20undangan%20Anda`}
+                      href={`https://wa.me/${req.client_phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi ${req.client_name}, this is Inviteflix. We would like to confirm the details of your invitation.`)}`}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="w-full bg-neutral-900 hover:bg-neutral-800 text-gray-300 font-semibold py-2 px-3 rounded-xl text-xs border border-neutral-800 flex items-center justify-center gap-1.5 transition-colors"
                     >
                       <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Chat WhatsApp</span>
+                      <span>Chat on WhatsApp</span>
                     </a>
                   </div>
                 </div>

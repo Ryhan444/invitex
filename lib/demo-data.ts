@@ -36,10 +36,10 @@ export const DEMO_EVENTS: Record<string, EventItem> = {
           backdrop_url: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2000&q=80",
           poster_url: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80",
           groom_name: "Reza Rahardian, S.T.",
-          groom_parents: "Putra dari Bpk. Ir. Hendra & Ibu Dr. Ratna",
+          groom_parents: "Son of Mr. Ir. Hendra & Mrs. Dr. Ratna",
           bride_name: "Amanda Manopo, B.A.",
-          bride_parents: "Putri dari Bpk. Drs. Bambang & Ibu Hj. Siti",
-          cta_text: "Buka Undangan (Play)",
+          bride_parents: "Daughter of Mr. Drs. Bambang & Mrs. Hj. Siti",
+          cta_text: "Open Invitation (Play)",
           rating: "99% Match",
           year: "2026",
           season: "Season 1",
@@ -60,21 +60,21 @@ export const DEMO_EVENTS: Record<string, EventItem> = {
               episode: "Episode 1",
               title: "First Glance at the Coffee Shop",
               duration: "2020",
-              synopsis: "Sebuah pertemuan tak terduga saat memesan Americano dingin di sudut Senopati. Secangkir kopi yang membuka ratusan percakapan tentang masa depan.",
+              synopsis: "An unexpected encounter while ordering an iced Americano at a corner café in Senopati. One cup of coffee that sparked hundreds of conversations about the future.",
               thumbnail: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80",
             },
             {
               episode: "Episode 2",
               title: "Surviving the Long Distance",
               duration: "2022",
-              synopsis: "Tantangan zona waktu terpisahkan jarak Jakarta - Tokyo. Ratusan jam video call membuktikan jarak tidak memudarkan komitmen.",
+              synopsis: "Time zones and the miles between Jakarta and Tokyo put us to the test. Hundreds of hours of video calls proved that distance could never fade our commitment.",
               thumbnail: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80",
             },
             {
               episode: "Episode 3",
               title: "She Said YES on Mount Batur",
               duration: "2025",
-              synopsis: "Di atas awan saat matahari terbit di Bali, Reza berlutut dan Amanda mengiyakan perjalanan seumur hidup.",
+              synopsis: "Above the clouds at sunrise in Bali, Reza got down on one knee and Amanda said yes to a lifelong journey.",
               thumbnail: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80",
             },
           ],
@@ -88,20 +88,20 @@ export const DEMO_EVENTS: Record<string, EventItem> = {
         is_visible: true,
         content: {
           heading: "PREMIERE SCHEDULE & VENUE",
-          subheading: "Jangan lewatkan waktu penayangan momen sakral kami.",
+          subheading: "Don't miss the premiere of our most sacred moment.",
           events: [
             {
               title: "Akad Nikah (Holy Matrimony)",
-              date: "Jumat, 25 Desember 2026",
+              date: "Friday, December 25, 2026",
               time: "08:00 - 10:00 WIB",
               location_name: "Grand Ballroom Hotel Indonesia Kempinski",
               address: "Jl. M.H. Thamrin No.1, Menteng, Jakarta Pusat",
-              notes: "Khusus Keluarga dan Kerabat Terdekat",
+              notes: "Family and Close Friends Only",
               icon: "ring",
             },
             {
               title: "Grand Gala Reception",
-              date: "Jumat, 25 Desember 2026",
+              date: "Friday, December 25, 2026",
               time: "18:30 - 21:30 WIB",
               location_name: "Grand Ballroom Hotel Indonesia Kempinski",
               address: "Jl. M.H. Thamrin No.1, Menteng, Jakarta Pusat",
@@ -121,7 +121,7 @@ export const DEMO_EVENTS: Record<string, EventItem> = {
         is_visible: true,
         content: {
           heading: "BEHIND THE SCENES & TRAILERS",
-          subheading: "Potret romansa kami dalam resolusi 4K Ultra HD.",
+          subheading: "Our love story, captured in 4K Ultra HD.",
           photos: [
             {
               title: "Sunset in Sumba",
@@ -159,7 +159,7 @@ export const DEMO_EVENTS: Record<string, EventItem> = {
         is_visible: true,
         content: {
           heading: "BOX OFFICE CONTRIBUTION (DIGITAL GIFT)",
-          subheading: "Doa restu Anda adalah anugerah terbesar bagi kami. Jika ingin memberikan tanda kasih secara digital:",
+          subheading: "Your prayers and blessings are the greatest gift of all. If you would like to send a token of love digitally:",
           accounts: [
             {
               bank_name: "Bank Central Asia (BCA)",
@@ -175,7 +175,7 @@ export const DEMO_EVENTS: Record<string, EventItem> = {
             },
           ],
           qris_url: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=500&q=80",
-          gift_address: "Penerima: Reza & Amanda (Villa Senopati Indah No. 42, Kebayoran Baru, Jakarta Selatan 12190)",
+          gift_address: "Recipient: Reza & Amanda (Villa Senopati Indah No. 42, Kebayoran Baru, Jakarta Selatan 12190)",
         },
       },
       {
@@ -186,7 +186,7 @@ export const DEMO_EVENTS: Record<string, EventItem> = {
         is_visible: true,
         content: {
           heading: "AUDIENCE REVIEWS & WISHES",
-          subheading: "Tinggalkan ulasan, doa restu, dan konfirmasi kehadiran Anda secara live.",
+          subheading: "Leave your review, your blessings, and your RSVP, live.",
           rsvp_enabled: true,
         },
       },
@@ -241,11 +241,11 @@ export const DEMO_EVENTS: Record<string, EventItem> = {
         is_visible: true,
         content: {
           heading: "PARTY RUNDOWN & CLUB ACCESS",
-          subheading: "Pastikan Anda hadir sebelum DJ set utama dimulai.",
+          subheading: "Make sure you arrive before the main DJ set begins.",
           events: [
             {
               title: "Welcome Drinks & Red Carpet",
-              date: "Sabtu, 20 November 2026",
+              date: "Saturday, November 20, 2026",
               time: "19:00 - 20:30 WIB",
               location_name: "Chāo Cháo Rooftop Lounge Jakarta",
               address: "SCBD Lot 11, Jl. Jend. Sudirman Kav 52-53, Jakarta Selatan",
@@ -254,7 +254,7 @@ export const DEMO_EVENTS: Record<string, EventItem> = {
             },
             {
               title: "Midnight Cake Drop & After Party",
-              date: "Sabtu, 20 November 2026",
+              date: "Saturday, November 20, 2026",
               time: "22:00 - Late",
               location_name: "Chāo Cháo Rooftop Lounge Jakarta",
               address: "SCBD Lot 11, Jl. Jend. Sudirman Kav 52-53",
@@ -288,7 +288,7 @@ export const DEMO_WISHES: Record<string, GuestWish[]> = {
       event_id: "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
       name: "Nicholas Saputra",
       attendance_status: "attending",
-      message: "Selamat buat Reza & Amanda! Produksi romansa terbaik tahun ini. Pasti hadir di premiere malam nanti! 🍿🍾",
+      message: "Congratulations, Reza & Amanda! The best romance production of the year. I'll definitely be at tonight's premiere! 🍿🍾",
       created_at: new Date(Date.now() - 3600000 * 2).toISOString(),
     },
     {
@@ -296,7 +296,7 @@ export const DEMO_WISHES: Record<string, GuestWish[]> = {
       event_id: "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
       name: "Chelsea Islan",
       attendance_status: "attending",
-      message: "Happy wedding kalian berdua! Langgeng terus sampai kakek nenek, visual undangannya keren banget gila ala Netflix! ❤️✨",
+      message: "Happy wedding, you two! Wishing you a love that lasts until you're grandparents. This Netflix-style invitation looks absolutely amazing! ❤️✨",
       created_at: new Date(Date.now() - 3600000 * 5).toISOString(),
     },
     {
@@ -304,7 +304,7 @@ export const DEMO_WISHES: Record<string, GuestWish[]> = {
       event_id: "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
       name: "Raditya Dika",
       attendance_status: "tentative",
-      message: "10/10 Rotten Tomatoes rating! Semoga pernikahannya seasyik nonton film box office setiap hari. Jangan lupa sediain popcorn di resepsi ya!",
+      message: "10/10 Rotten Tomatoes rating! May your marriage be as fun as watching a box-office hit every single day. Don't forget the popcorn at the reception!",
       created_at: new Date(Date.now() - 3600000 * 12).toISOString(),
     },
   ],
@@ -331,7 +331,7 @@ export const DEMO_REQUESTS: CreationRequest[] = [
       event_title: "Sarah & David: Autumn in Verona",
       target_date: "2026-11-15T09:00:00Z",
       preferred_slug: "sarah-david-wedding",
-      notes: "Ingin nuansa cinematic vintage dark mode, banyak foto prewed di Venice.",
+      notes: "Looking for a cinematic, vintage dark-mode feel, with lots of pre-wedding photos from Venice.",
       selected_blocks: ["banner", "story", "schedule", "gallery", "donation", "guestbook"],
     },
     status: "pending",
@@ -347,7 +347,7 @@ export const DEMO_REQUESTS: CreationRequest[] = [
       event_title: "National Tech & Healthcare Summit 2026",
       target_date: "2026-10-10T08:00:00Z",
       preferred_slug: "tech-health-summit",
-      notes: "Undangan eksklusif untuk 500 dokter & founder startup.",
+      notes: "Exclusive invitation for 500 doctors & startup founders.",
       selected_blocks: ["banner", "schedule", "maps", "guestbook"],
     },
     status: "approved",

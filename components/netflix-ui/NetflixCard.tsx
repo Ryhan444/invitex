@@ -72,7 +72,7 @@ export function NetflixCard({ event, featured = false }: NetflixCardProps) {
           <div className="flex items-center gap-2 mt-1 text-[11px] text-gray-400">
             <span className="flex items-center gap-1 text-gray-400">
               <Calendar className="w-3 h-3 text-netflix-red" />
-              {new Date(event.event_date).toLocaleDateString("id-ID", {
+              {new Date(event.event_date).toLocaleDateString("en-US", {
                 month: "short",
                 year: "numeric",
               })}

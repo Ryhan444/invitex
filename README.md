@@ -1,123 +1,93 @@
-# Inviteflix 🎬🍿
+# Inviteflix 🎬
 
-**Inviteflix** adalah platform web undangan digital serbaguna dengan estetika visual ala **Netflix** (Cinematic, Modern Dark Mode, dan Red Accents). Dirancang dengan arsitektur **block-based dynamic engine**, performa tinggi Next.js App Router, dan PostgreSQL di Supabase dengan Realtime Guestbook.
-
----
-
-## 🌟 Fitur Utama
-
-1. **Cinematic Hero Billboard (`/[slug]`)**
-   - Poster & backdrop resolusi tinggi dengan gradien khas Netflix.
-   - Efek perayaan konfeti dan pemutar musik instan saat tombol **"Buka Undangan (Play)"** ditekan.
-   - Personalisasi nama tamu VIP via URL query param: `/[slug]?to=Bpk.+Joko+Widodo`.
-
-2. **Episodes / Story Timeline Block**
-   - Kisah perjalanan disajikan dalam format episode serial Netflix lengkap dengan thumbnail, durasi tahun, dan sinopsis.
-
-3. **Premiere Schedule, Countdown & Maps**
-   - Hitung mundur live (Hari, Jam, Menit, Detik).
-   - Integrasi tombol satu klik **+ Google Calendar**.
-   - Peta lokasi interaktif dark-mode Google Maps dan navigasi aplikasi.
-
-4. **Behind the Scenes Gallery**
-   - Galeri foto 4K dengan modal Lightbox viewer (Next, Previous, Fullscreen).
-
-5. **Box Office Contribution (Digital Gift)**
-   - Kartu bank & e-wallet dengan tombol **Salin Nomor Rekening** instan.
-   - Preview scan barcode **QRIS**.
-   - Alamat pengiriman kado fisik dengan tombol salin alamat.
-
-6. **Live Audience Reviews (Realtime Guestbook & RSVP)**
-   - Tamu dapat mengirimkan ucapan dan status kehadiran (Hadir, Ragu-ragu, Berhalangan).
-   - Feed ucapan terhubung dengan **Supabase Realtime Channel** (muncul seketika tanpa refresh halaman).
-
-7. **User Request Portal (`/request`)**
-   - Formulir permohonan bagi klien umum untuk memesan undangan kustom.
-   - Pilihan checklist blok komponen dinamis yang diinginkan.
-   - Status permohonan tersimpan di database (`PENDING`, `APPROVED`, `REJECTED`).
-
-8. **Admin Studio Dashboard (`/admin`)**
-   - Login admin dengan passkey atau Supabase Auth (tersedia tombol 1-Click Demo Studio Login).
-   - Metrik ringkasan (Total Undangan, Published, Pending Request).
-   - Verifikasi Request: 1-click **Approve & Generate** langsung membuat halaman `/[slug]` aktif, atau hubungi via WhatsApp.
-   - **Visual Block Manager**: Atur urutan blok (Re-order Up/Down), toggle visibility (Show/Hide), dan edit data JSON langsung.
+**Inviteflix** is a digital invitation platform with a Netflix-inspired look (cinematic, dark mode, red accents). It is built on a block-based content engine, the Next.js App Router and Supabase (PostgreSQL + Realtime guestbook).
 
 ---
 
-## 🛠 Tech Stack
+## Features
 
-- **Framework:** Next.js 15 (App Router, Server Components & Server Actions)
-- **Language:** TypeScript
-- **Styling & Animation:** Tailwind CSS, Framer Motion, Lucide Icons, Canvas Confetti
-- **Database & Realtime:** Supabase (PostgreSQL & Realtime Publication)
-- **Deployment:** Vercel & Supabase
+1. **Cinematic hero billboard (`/[slug]`)**
+   - High-resolution poster and backdrop with Netflix-style gradients.
+   - Confetti and background music when the guest presses **Open Invitation**.
+   - Personalised guest name via query param: `/[slug]?to=John+Doe`.
+2. **Story episodes:** your journey presented as a series of episodes.
+3. **Schedule, countdown & maps:** live countdown, one-click Google Calendar, embedded map.
+4. **Gallery:** photo gallery with a fullscreen lightbox.
+5. **Digital gifts:** bank and e-wallet cards with one-tap copy, a QRIS preview and a gift delivery address.
+6. **Live guestbook & RSVP:** wishes appear instantly through Supabase Realtime.
+7. **Request form (`/request`):** clients submit their event details and choose sections.
+8. **Admin studio:** a private dashboard to review requests, publish events and manage blocks.
 
 ---
 
-## 🚀 Panduan Setup Lokal
+## Tech stack
 
-### 1. Clone & Install Dependensi
+- Next.js 15 (App Router), TypeScript
+- Tailwind CSS, Framer Motion, Lucide Icons, Canvas Confetti
+- Supabase (PostgreSQL, Realtime)
+
+---
+
+## Local setup
+
 ```bash
-git clone <repo-url>
-cd invitex
 npm install
-```
-
-### 2. Konfigurasi Environment Variables
-Salin berkas `.env.example` menjadi `.env.local`:
-```bash
 cp .env.example .env.local
 ```
 
-Isi variabel berikut:
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
-ADMIN_SECRET_KEY=admin123
+Fill in `.env.local`. Without Supabase keys the app runs in in-memory demo mode.
+
+### Admin studio credentials
+
+The admin studio is served from a private URL segment set in `ADMIN_PATH` and stays disabled (404) until all four admin variables are set:
+
+```bash
+npm run hash-password -- "a-long-unique-password"
+# prints ADMIN_PASSWORD_HASH=... and ADMIN_SESSION_SECRET=..., paste both into .env.local
 ```
 
-> **Catatan:** Jika belum memasukkan key Supabase, Inviteflix secara otomatis berjalan dalam mode **Demo In-Memory Mode** dengan data undangan Reza & Amanda dan Kevin Sanjaya siap uji coba tanpa error.
+```env
+ADMIN_PATH=<random string, 8-64 chars>
+ADMIN_USERNAME=<your username>
+ADMIN_PASSWORD_HASH=<from the script>
+ADMIN_SESSION_SECRET=<from the script>
+```
 
-### 3. Migrasi Skema Supabase PostgreSQL
-Buka **SQL Editor** di Dashboard Supabase Anda, lalu salin dan jalankan seluruh isi berkas:
-[`supabase/schema.sql`](file:///Users/mac/Documents/invitex/supabase/schema.sql)
+Keep these values out of the repository and out of any public documentation.
 
-Skema ini sudah mencakup:
-- Ekstensi `uuid-ossp`
-- Tabel `events`, `event_sections`, `guest_wishes`, `creation_requests`
-- Row Level Security (RLS) Policies
-- Realtime publication `supabase_realtime` untuk tabel `guest_wishes`
-- Seed data demo undangan pernikahan dan pesta ulang tahun
+### Database
 
-### 4. Jalankan Aplikasi
+Run `supabase/schema.sql` in the Supabase SQL editor. It creates the tables, RLS policies, the realtime publication for `guest_wishes`, and demo seed data.
+
+### Run
+
 ```bash
 npm run dev
 ```
-Buka browser di `http://localhost:3000`.
 
 ---
 
-## 🌐 Rute Halaman
+## Public routes
 
-| Rute | Deskripsi |
+| Route | Description |
 |---|---|
-| `/` | Landing page publik Inviteflix bergaya Netflix Billboard |
-| `/reza-amanda-wedding` | Demo undangan pernikahan sinematik |
-| `/chapter-25-kevin` | Demo undangan pesta ulang tahun / VIP event |
-| `/request` | Formulir pengajuan pembuatan undangan oleh publik |
-| `/admin/login` | Halaman login admin studio |
-| `/admin/dashboard` | Dashboard manajemen acara & metrik |
-| `/admin/dashboard/requests` | Panel verifikasi dan persetujuan pengajuan |
-| `/admin/dashboard/events/create` | Manual event creator |
-| `/admin/dashboard/events/[id]/edit` | Visual block re-ordering & JSON editor |
+| `/` | Landing page |
+| `/reza-amanda-wedding` | Wedding demo |
+| `/chapter-25-kevin` | Birthday demo |
+| `/request` | Invitation request form |
 
 ---
 
-## ☁️ Deploy ke Vercel
+## Security notes
 
-1. Push repository ini ke GitHub.
-2. Buka dashboard [Vercel](https://vercel.com) dan pilih **Import Project**.
-3. Tambahkan Environment Variables dari `.env.local` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`).
-4. Klik **Deploy**!
+- Admin sessions are HMAC-signed, `HttpOnly`, `Secure`, `SameSite=Strict` cookies that expire after 8 hours.
+- Passwords are stored as PBKDF2-SHA256 hashes, never in source code.
+- Admin pages and APIs return a plain 404 to unauthenticated visitors.
+- Public endpoints validate input and are rate-limited per IP. The limiter is in-memory: on multi-instance or serverless hosting, back it with a shared store such as Upstash Redis.
+- Security headers (CSP, HSTS, X-Frame-Options and more) are set in `next.config.ts`.
 
+---
+
+## Deploy
+
+Deploy to Vercel or any Node host over **HTTPS**, and add every variable from `.env.example` in the host's environment settings.
